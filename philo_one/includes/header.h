@@ -3,21 +3,26 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <pthread.h>
+# include <sys/time.h>
 
-typedef struct	s_table
+typedef struct s_philo
 {
-	int			*fourchette;
-}				t_table;
+	int			id;
+	int			last_eat;
+	void		*kitchen;
+}				t_philo;
 
-typedef struct	s_game
+typedef struct	s_kitchen
 {
-	t_table		table;
 	int			n_philo;
 	int			t_to_die;
 	int			t_to_eat;
 	int			t_to_sleep;
 	int			n_must_eat;
-}				t_game;
-
+	pthread_mutex_t	*forks;
+	pthread_t	*thread;
+	t_philo		*philos;
+}				t_kitchen;
 
 #endif

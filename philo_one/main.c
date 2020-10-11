@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/11 18:43:12 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/12 00:28:49 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,39 +62,105 @@ int			ft_atoi(const char *str)
 	return (nbr * signe);
 }
 
-int	init_game(t_game *game, int argc, char const *argv[])
+void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 {
-	game->n_must_eat = -1;
-	game->n_philo = ft_atoi(argv[1]);
-	game->t_to_die = ft_atoi(argv[2]);
-	game->t_to_eat = ft_atoi(argv[3]);
-	game->t_to_sleep = ft_atoi(argv[4]);
+	philo->id = id;
+	philo->kitchen = kitchen;
+	philo->last_eat = 0; //need change
+}
+
+int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
+{
+	int i;
+
+	kitchen->n_must_eat = -1;
+	kitchen->n_philo = ft_atoi(argv[1]);
+	kitchen->t_to_die = ft_atoi(argv[2]) * 1000;
+	kitchen->t_to_eat = ft_atoi(argv[3]) * 1000;
+	kitchen->t_to_sleep = ft_atoi(argv[4]);
 	if (argc > 5)
-		game->n_must_eat = ft_atoi(argv[5]);
-	game->table.fourchette = malloc(sizeof(int) * game->n_philo);
-	if (game->table.fourchette == 0)
+		kitchen->n_must_eat = ft_atoi(argv[5]);
+	kitchen->forks = malloc(sizeof(pthread_mutex_t) * kitchen->n_philo);
+	if (kitchen->forks == 0)
+		return (0);
+	i =-1;
+	while (++i < kitchen->n_philo)
+		pthread_mutex_init(&kitchen->forks[i], PTHREAD_MUTEX_INITIALIZER);
+	kitchen->thread = malloc(sizeof(pthread_t) * kitchen->n_philo);
+	if (kitchen->thread == 0)
 		return (0);
 	return (1);
 }
 
-void	free_game(t_game *game)
+void	free_kitchen(t_kitchen *kitchen)
 {
-	free(game->table.fourchette);
+	free(kitchen->forks);
+	free(kitchen->thread);
+}
+
+void	eat_spleep(t_philo *philo, int first, int second)
+{
+	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
+
+	usleep(kitchen->t_to_eat);
+	philo->last_eat = 0; //Change
+	pthread_mutex_unlock(&kitchen->forks[first]);
+	pthread_mutex_unlock(&kitchen->forks[second]);
+	usleep(kitchen->t_to_sleep);
+}
+
+void	*philosopher(void *data)
+{
+	int i;
+	int sec;
+
+	t_philo		*philo = (t_philo*) data;
+	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
+	i = -1;
+	while (philo->last_eat + kitchen->t_to_die > timenow) //change
+	{
+		i = (i + 1) % kitchen->n_philo;
+		if (!pthread_mutex_lock(&kitchen->forks[i]))
+		{
+			sec = (i + 1) % kitchen->n_philo;
+			if (!pthread_mutex_lock(&kitchen->forks[sec]))
+				eat_spleep(kitchen, i, sec);
+			else
+			{
+				sec = (i - 1) % kitchen->n_philo;
+				if (!pthread_mutex_lock(&kitchen->forks[sec]))
+					eat_spleep(kitchen, i, sec);
+			}
+		}
+	}
+	return (0);
 }
 
 int main(int argc, char const *argv[])
 {
-	t_game	game;
+	t_kitchen	kitchen;
+	int			i;
 
 	if (argc < 5 )
 	{
 		ft_putstr_fd("Number of arguemnt to low (min 5)\n", 2);
 		exit(1);
 	}
-	if (!init_game(&game, argc, argv))
+	if (!init_kitchen(&kitchen, argc, argv))
 	{
 		ft_putstr_fd("Allocation problem\n", 2);
-		exit(103);
+		exit(2);
 	}
-	free_game(&game);
+	i=-1;
+	while (++i < kitchen.n_philo)
+	{
+		pthread_create(kitchen.thread[0], NULL, philosopher, &kitchen.philos[i]);
+	}
+	i = -1;
+	while (++i < kitchen.n_philo)
+	{
+		pthread_join(kitchen.thread[i], NULL);
+	}
+	
+	free_kitchen(&kitchen);
 }
