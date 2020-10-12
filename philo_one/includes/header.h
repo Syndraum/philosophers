@@ -30,6 +30,7 @@ typedef struct	s_kitchen
 	pthread_mutex_t	*forks;
 	pthread_t	*thread;
 	t_philo		*philos;
+	struct timeval	t_begin;
 }				t_kitchen;
 
 size_t			ft_strlen(const char *s);

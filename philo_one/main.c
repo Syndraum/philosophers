@@ -6,7 +6,7 @@
 /*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 16:35:49 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/12 16:49:19 by mazoise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->philos = malloc(sizeof(t_philo) * kitchen->n_philo);
 	if (kitchen->philos == 0)
 		return (0);
+	gettimeofday(&kitchen->t_begin, NULL);
 	return (1);
 }
 
@@ -145,14 +146,12 @@ int main(int argc, char const *argv[])
 	i=-1;
 	while (++i < kitchen.n_philo)
 	{
-		init_philosoph(&kitchen.philos[i], &kitchen, i);
+		init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
 		pthread_create(&kitchen.thread[i], NULL, philosopher, &kitchen.philos[i]);
 	}
 	i = -1;
 	while (++i < kitchen.n_philo)
-	{
 		pthread_join(kitchen.thread[i], NULL);
-	}
-	
+	ft_putstr_fd("END\n", 1);
 	free_kitchen(&kitchen);
 }
