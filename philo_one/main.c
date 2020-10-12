@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 22:00:45 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/12 22:32:01 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->t_to_eat = ft_atoi(argv[3]) * 1000;
 	kitchen->t_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argc > 5)
-	{
-		ft_putstr_fd("ARG\n", 1);
 		kitchen->n_must_eat = ft_atoi(argv[5]);
-	}
 	kitchen->forks = malloc(sizeof(pthread_mutex_t) * kitchen->n_philo);
 	if (kitchen->forks == 0)
 		return (0);
@@ -68,6 +65,11 @@ void	free_kitchen(t_kitchen *kitchen)
 	free(kitchen->forks);
 	free(kitchen->philos);
 	free(kitchen->thread);
+}
+
+int		is_one_died(t_kitchen *kitchen)
+{
+	return (kitchen->philo_die);
 }
 
 long	diff_timestamp(struct timeval *begin, struct timeval *end)
@@ -122,13 +124,19 @@ void	eat_sleep(t_philo *philo)
 {
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 
+	if (is_one_died(kitchen))
+		return ;
 	print_message(philo, TEXT_EAT);
 	usleep(kitchen->t_to_eat);
 	gettimeofday(&philo->last_eat, NULL);
 	pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 	pthread_mutex_unlock(&kitchen->forks[philo->forks[1]]);
+	if (is_one_died(kitchen))
+		return ;
 	print_message(philo, TEXT_SLEEP);
 	usleep(kitchen->t_to_sleep);
+	if (is_one_died(kitchen))
+		return ;
 	print_message(philo, TEXT_THINK);
 }
 
@@ -164,7 +172,7 @@ void	*philosopher(void *data)
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	n = 0;
-	while (!is_die(philo) && !kitchen->philo_die && !is_finish(n, kitchen))
+	while (!is_finish(n, kitchen) && !is_one_died(kitchen) && !is_die(philo))
 	{
 		if (!pthread_mutex_lock(&kitchen->forks[philo->forks[0]]))
 		{
@@ -202,8 +210,7 @@ int main(int argc, char const *argv[])
 	i = -1;
 	while (++i < kitchen.n_philo)
 		pthread_join(kitchen.thread[i], NULL);
-	ft_putstr_fd("END\n", 1);
-	ft_putstr_fd(ft_itoa(kitchen.philo_die), 1);
+	// ft_putstr_fd("END\n", 1);
 	free_kitchen(&kitchen);
 	return (0);
 }
