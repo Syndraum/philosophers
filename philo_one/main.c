@@ -6,7 +6,7 @@
 /*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 17:57:30 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/12 19:01:54 by mazoise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@ int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 {
 	int i;
 
+	kitchen->philo_die = 0;
 	kitchen->n_must_eat = -1;
 	kitchen->n_philo = ft_atoi(argv[1]);
 	kitchen->t_to_die = ft_atoi(argv[2]) * 1000;
 	kitchen->t_to_eat = ft_atoi(argv[3]) * 1000;
-	kitchen->t_to_sleep = ft_atoi(argv[4]);
+	kitchen->t_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argc > 5)
 		kitchen->n_must_eat = ft_atoi(argv[5]);
 	kitchen->forks = malloc(sizeof(pthread_mutex_t) * kitchen->n_philo);
@@ -65,14 +66,22 @@ void	free_kitchen(t_kitchen *kitchen)
 	free(kitchen->thread);
 }
 
+long	diff_timestamp(struct timeval *begin, struct timeval *end)
+{
+	long	diff;
+
+	diff = end->tv_sec * 1000000 + end->tv_usec;
+	diff -= begin->tv_sec * 1000000 + begin->tv_usec;
+	return (diff);
+}
+
 char	*get_timestamp(struct timeval *begin, struct timeval *current)
 {
 	char	*ts;
 	long	diff;
 
-	diff = current->tv_sec * 1000000 + current->tv_usec;
-	diff -= begin->tv_sec * 1000000 + begin->tv_usec;
-	ts = ft_strjoin(ft_itoa(diff / 1000), " ");
+	diff = diff_timestamp(begin, current) / 1000;
+	ts = ft_strjoin(ft_itoa(diff), "ms ");
 	return (ts);
 }
 
@@ -112,6 +121,23 @@ void	eat_sleep(t_philo *philo)
 	print_message(philo, TEXT_THINK);
 }
 
+int		is_die(t_philo *philo)
+{
+	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
+	struct timeval	current;
+	long		diff;
+
+	gettimeofday(&current, NULL);
+	diff = diff_timestamp(&philo->last_eat, &current);
+	if (diff >= kitchen->t_to_die)
+	{
+		kitchen->philo_die = 1;
+		print_message(philo, TEXT_DIE);
+		return (1);
+	}
+	return (0);
+}
+
 void	*philosopher(void *data)
 {
 	int	n;
@@ -120,7 +146,7 @@ void	*philosopher(void *data)
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	n = -1;
-	while (++n < 5)
+	while (!is_die(philo) && !kitchen->philo_die)
 	{
 		if (!pthread_mutex_lock(&kitchen->forks[philo->forks[0]]))
 		{
@@ -130,7 +156,6 @@ void	*philosopher(void *data)
 				pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 		}
 	}
-	print_message(philo, TEXT_DIE);
 	return (0);
 }
 
