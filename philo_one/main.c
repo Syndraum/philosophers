@@ -6,7 +6,7 @@
 /*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 19:01:54 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/12 19:17:40 by mazoise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->t_to_eat = ft_atoi(argv[3]) * 1000;
 	kitchen->t_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argc > 5)
+	{
+		ft_putstr_fd("ARG\n", 1);
 		kitchen->n_must_eat = ft_atoi(argv[5]);
+	}
 	kitchen->forks = malloc(sizeof(pthread_mutex_t) * kitchen->n_philo);
 	if (kitchen->forks == 0)
 		return (0);
@@ -138,6 +141,13 @@ int		is_die(t_philo *philo)
 	return (0);
 }
 
+int		is_finish(int n, t_kitchen *kitchen)
+{
+	if (kitchen->n_must_eat != -1 && kitchen->n_must_eat == n)
+		return (1);
+	return (0);
+}
+
 void	*philosopher(void *data)
 {
 	int	n;
@@ -145,8 +155,8 @@ void	*philosopher(void *data)
 	t_philo		*philo = (t_philo*)data;
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
-	n = -1;
-	while (!is_die(philo) && !kitchen->philo_die)
+	n = 0;
+	while (!is_die(philo) && !kitchen->philo_die && !is_finish(n, kitchen))
 	{
 		if (!pthread_mutex_lock(&kitchen->forks[philo->forks[0]]))
 		{
@@ -155,6 +165,7 @@ void	*philosopher(void *data)
 			else
 				pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 		}
+		n++;
 	}
 	return (0);
 }
