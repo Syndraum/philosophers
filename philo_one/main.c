@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 19:17:40 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/12 22:00:45 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_putstr_fd(char *s, int fd)
 void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 {
 	philo->id = id;
-	philo->forks[0] = id;
+	philo->forks[0] = id % kitchen->n_philo;
 	philo->forks[1] = (id + 1) % kitchen->n_philo;
 	philo->kitchen = kitchen;
 	gettimeofday(&philo->last_eat, NULL);
@@ -66,6 +66,7 @@ int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 void	free_kitchen(t_kitchen *kitchen)
 {
 	free(kitchen->forks);
+	free(kitchen->philos);
 	free(kitchen->thread);
 }
 
@@ -81,10 +82,15 @@ long	diff_timestamp(struct timeval *begin, struct timeval *end)
 char	*get_timestamp(struct timeval *begin, struct timeval *current)
 {
 	char	*ts;
+	char	*tmp;
 	long	diff;
 
 	diff = diff_timestamp(begin, current) / 1000;
-	ts = ft_strjoin(ft_itoa(diff), "ms ");
+	tmp = ft_itoa(diff);
+	ts = ft_strjoin(tmp, "ms ");
+	free(tmp);
+	if (ts == 0)
+		return (0);
 	return (ts);
 }
 
@@ -100,7 +106,9 @@ void	print_message(t_philo *philo, char *text)
 	kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&current, NULL);
 	ts = get_timestamp(&kitchen->t_begin, &current);
-	id = ft_strjoin(ft_itoa(philo->id), " ");
+	tmp = ft_itoa(philo->id);
+	id = ft_strjoin(tmp, " ");
+	free(tmp);
 	tmp = ft_strjoin(ts, id);
 	free(ts);
 	free(id);
@@ -195,5 +203,7 @@ int main(int argc, char const *argv[])
 	while (++i < kitchen.n_philo)
 		pthread_join(kitchen.thread[i], NULL);
 	ft_putstr_fd("END\n", 1);
+	ft_putstr_fd(ft_itoa(kitchen.philo_die), 1);
 	free_kitchen(&kitchen);
+	return (0);
 }
