@@ -6,7 +6,7 @@
 /*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 17:12:51 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/12 17:57:30 by mazoise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,17 @@ void	free_kitchen(t_kitchen *kitchen)
 	free(kitchen->thread);
 }
 
+char	*get_timestamp(struct timeval *begin, struct timeval *current)
+{
+	char	*ts;
+	long	diff;
+
+	diff = current->tv_sec * 1000000 + current->tv_usec;
+	diff -= begin->tv_sec * 1000000 + begin->tv_usec;
+	ts = ft_strjoin(ft_itoa(diff / 1000), " ");
+	return (ts);
+}
+
 void	print_message(t_philo *philo, char *text)
 {
 	char	*id;
@@ -72,9 +83,11 @@ void	print_message(t_philo *philo, char *text)
 	char	*str;
 	char	*tmp;
 	struct timeval	current;
+	t_kitchen	*kitchen;
 
+	kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&current, NULL);
-	ts = ft_strjoin(ft_itoa(current.tv_usec), " ");
+	ts = get_timestamp(&kitchen->t_begin, &current);
 	id = ft_strjoin(ft_itoa(philo->id), " ");
 	tmp = ft_strjoin(ts, id);
 	free(ts);
