@@ -1,11 +1,15 @@
-SRCS	= main.c
+SRCS	=	main.c \
+			str.c \
+			conv.c \
+			mem.c
+
 OBJS	= ${SRCS:.c=.o}
 
 INCLUDE	= $(addprefix ${D_INCLUDE}/, header.h)
 D_INCLUDE	= includes
 
-CC		= clang-9
-CFLAGS	= -Wall -Wextra -Werror -I $(D_INCLUDE)
+CC		= clang
+CFLAGS	= -g -Wall -Wextra -Werror -I $(D_INCLUDE) -pthread
 
 RN		= rm -f
 
@@ -14,7 +18,7 @@ NAME	= philo_one
 all:	${NAME}
 
 ${NAME}: ${OBJS} ${INCLUDE}
-	${CC} ${CFLAG} ${OBJS} -o ${NAME}
+	${CC} ${CFLAGS} ${OBJS} -o ${NAME}
 
 clean:
 	${RM} ${OBJS}

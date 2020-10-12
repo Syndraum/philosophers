@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 00:28:49 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/12 16:35:49 by mazoise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-size_t	ft_strlen(const char *str)
-{
-	size_t len;
-
-	if (!str)
-		return (0);
-	len = 0;
-	while (str[len])
-		len++;
-	return (len);
-}
 
 void	ft_putstr_fd(char *s, int fd)
 {
@@ -35,38 +23,11 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-int			ft_atoi(const char *str)
-{
-	int			signe;
-	int			nbr;
-	const char	*begin;
-
-	signe = 1;
-	nbr = 0;
-	while (*str && ((*str >= 9 && *str <= 13) || *str == 32))
-		str++;
-	if (*str == '-' || *str == '+')
-		signe = (*(str++) == '-') ? -1 : 1;
-	begin = str;
-	while (*str && *str >= '0' && *str <= '9')
-	{
-		if (str - begin == 18 && *str - '0' > 7)
-		{
-			if (signe == 1)
-				return (-1);
-			else if (signe == -1)
-				return (0);
-		}
-		nbr = (nbr * 10) + (*str++ - '0');
-	}
-	return (nbr * signe);
-}
-
 void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 {
 	philo->id = id;
 	philo->kitchen = kitchen;
-	philo->last_eat = 0; //need change
+	gettimeofday(&philo->last_eat, NULL);
 }
 
 int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
@@ -85,9 +46,12 @@ int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 		return (0);
 	i =-1;
 	while (++i < kitchen->n_philo)
-		pthread_mutex_init(&kitchen->forks[i], PTHREAD_MUTEX_INITIALIZER);
+		pthread_mutex_init(&kitchen->forks[i], NULL);
 	kitchen->thread = malloc(sizeof(pthread_t) * kitchen->n_philo);
 	if (kitchen->thread == 0)
+		return (0);
+	kitchen->philos = malloc(sizeof(t_philo) * kitchen->n_philo);
+	if (kitchen->philos == 0)
 		return (0);
 	return (1);
 }
@@ -98,41 +62,68 @@ void	free_kitchen(t_kitchen *kitchen)
 	free(kitchen->thread);
 }
 
-void	eat_spleep(t_philo *philo, int first, int second)
+void	print_message(t_philo *philo, char *text)
+{
+	char	*id;
+	char	*ts;
+	char	*str;
+	char	*tmp;
+	struct timeval	current;
+
+	gettimeofday(&current, NULL);
+	ts = ft_strjoin(ft_itoa(current.tv_usec), " ");
+	id = ft_strjoin(ft_itoa(philo->id), " ");
+	tmp = ft_strjoin(ts, id);
+	free(ts);
+	free(id);
+	str = ft_strjoin(tmp, text);
+	free(tmp);
+	ft_putstr_fd(str, 1);
+	free(str);
+}
+
+void	eat_sleep(t_philo *philo, int first, int second)
 {
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 
+	print_message(philo, TEXT_EAT);
 	usleep(kitchen->t_to_eat);
-	philo->last_eat = 0; //Change
+	gettimeofday(&philo->last_eat, NULL);
 	pthread_mutex_unlock(&kitchen->forks[first]);
 	pthread_mutex_unlock(&kitchen->forks[second]);
+	print_message(philo, TEXT_SLEEP);
 	usleep(kitchen->t_to_sleep);
+	print_message(philo, TEXT_THINK);
 }
 
 void	*philosopher(void *data)
 {
 	int i;
 	int sec;
+	int	n;
 
-	t_philo		*philo = (t_philo*) data;
+	t_philo		*philo = (t_philo*)data;
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
-	i = -1;
-	while (philo->last_eat + kitchen->t_to_die > timenow) //change
+	gettimeofday(&philo->last_eat, NULL);
+	i = 0;
+	n = -1;
+	while (++n < 5)
 	{
-		i = (i + 1) % kitchen->n_philo;
 		if (!pthread_mutex_lock(&kitchen->forks[i]))
 		{
 			sec = (i + 1) % kitchen->n_philo;
 			if (!pthread_mutex_lock(&kitchen->forks[sec]))
-				eat_spleep(kitchen, i, sec);
+				eat_sleep(philo, i, sec);
 			else
 			{
 				sec = (i - 1) % kitchen->n_philo;
 				if (!pthread_mutex_lock(&kitchen->forks[sec]))
-					eat_spleep(kitchen, i, sec);
+					eat_sleep(philo, i, sec);
 			}
 		}
+		i = (i + 1) % kitchen->n_philo;
 	}
+	print_message(philo, TEXT_DIE);
 	return (0);
 }
 
@@ -154,7 +145,8 @@ int main(int argc, char const *argv[])
 	i=-1;
 	while (++i < kitchen.n_philo)
 	{
-		pthread_create(kitchen.thread[0], NULL, philosopher, &kitchen.philos[i]);
+		init_philosoph(&kitchen.philos[i], &kitchen, i);
+		pthread_create(&kitchen.thread[i], NULL, philosopher, &kitchen.philos[i]);
 	}
 	i = -1;
 	while (++i < kitchen.n_philo)

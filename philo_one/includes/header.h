@@ -5,12 +5,19 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <string.h>
+
+# define TEXT_FORK "has taken a fork\n"
+# define TEXT_EAT "is eating\n"
+# define TEXT_SLEEP "is sleeping\n"
+# define TEXT_THINK "is thinking\n"
+# define TEXT_DIE "is died\n"
 
 typedef struct s_philo
 {
 	int			id;
-	int			last_eat;
 	void		*kitchen;
+	struct timeval	last_eat;
 }				t_philo;
 
 typedef struct	s_kitchen
@@ -24,5 +31,14 @@ typedef struct	s_kitchen
 	pthread_t	*thread;
 	t_philo		*philos;
 }				t_kitchen;
+
+size_t			ft_strlen(const char *s);
+size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t			ft_strlcat(char *dst, const char *src, size_t dstsize);
+int				ft_atoi(const char *str);
+void			*ft_calloc(size_t count, size_t size);
+char			*ft_strjoin(char const *s1, char const *s2);
+char			*ft_itoa(int n);
+void			ft_putstr_fd(char *s, int fd);
 
 #endif
