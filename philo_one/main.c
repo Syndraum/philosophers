@@ -6,7 +6,7 @@
 /*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/12 16:49:19 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/12 17:12:51 by mazoise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	ft_putstr_fd(char *s, int fd)
 void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 {
 	philo->id = id;
+	philo->forks[0] = id;
+	philo->forks[1] = (id + 1) % kitchen->n_philo;
 	philo->kitchen = kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 }
@@ -83,15 +85,15 @@ void	print_message(t_philo *philo, char *text)
 	free(str);
 }
 
-void	eat_sleep(t_philo *philo, int first, int second)
+void	eat_sleep(t_philo *philo)
 {
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 
 	print_message(philo, TEXT_EAT);
 	usleep(kitchen->t_to_eat);
 	gettimeofday(&philo->last_eat, NULL);
-	pthread_mutex_unlock(&kitchen->forks[first]);
-	pthread_mutex_unlock(&kitchen->forks[second]);
+	pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
+	pthread_mutex_unlock(&kitchen->forks[philo->forks[1]]);
 	print_message(philo, TEXT_SLEEP);
 	usleep(kitchen->t_to_sleep);
 	print_message(philo, TEXT_THINK);
@@ -99,30 +101,21 @@ void	eat_sleep(t_philo *philo, int first, int second)
 
 void	*philosopher(void *data)
 {
-	int i;
-	int sec;
 	int	n;
 
 	t_philo		*philo = (t_philo*)data;
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
-	i = 0;
 	n = -1;
 	while (++n < 5)
 	{
-		if (!pthread_mutex_lock(&kitchen->forks[i]))
+		if (!pthread_mutex_lock(&kitchen->forks[philo->forks[0]]))
 		{
-			sec = (i + 1) % kitchen->n_philo;
-			if (!pthread_mutex_lock(&kitchen->forks[sec]))
-				eat_sleep(philo, i, sec);
+			if (!pthread_mutex_lock(&kitchen->forks[philo->forks[1]]))
+				eat_sleep(philo);
 			else
-			{
-				sec = (i - 1) % kitchen->n_philo;
-				if (!pthread_mutex_lock(&kitchen->forks[sec]))
-					eat_sleep(philo, i, sec);
-			}
+				pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 		}
-		i = (i + 1) % kitchen->n_philo;
 	}
 	print_message(philo, TEXT_DIE);
 	return (0);
