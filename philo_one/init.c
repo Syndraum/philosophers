@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/13 14:37:08 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/13 15:39:54 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,13 @@
 
 void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 {
+	char	*tmp;
+
+
 	philo->id = id;
+	tmp = ft_itoa(philo->id);
+	philo->s_id = ft_strjoin(tmp, " ");
+	free(tmp);
 	philo->forks[0] = id % kitchen->n_philo;
 	philo->forks[1] = (id + 1) % kitchen->n_philo;
 	philo->kitchen = kitchen;

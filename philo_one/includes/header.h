@@ -16,6 +16,7 @@
 typedef struct s_philo
 {
 	int			id;
+	char		*s_id;
 	int			forks[2];
 	void		*kitchen;
 	struct timeval	last_eat;

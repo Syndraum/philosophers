@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:35:54 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/13 14:40:06 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/13 16:03:42 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ int		is_die(t_philo *philo)
 
 	gettimeofday(&current, NULL);
 	diff = diff_timestamp(&philo->last_eat, &current);
-	if (diff >= kitchen->t_to_die)
+	if (diff > kitchen->t_to_die)
 	{
-		kitchen->philo_die = 1;
 		print_message(philo, TEXT_DIE);
+		kitchen->philo_die = 1;
 		return (1);
 	}
 	return (0);

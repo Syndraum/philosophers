@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:44:59 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/13 15:08:44 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/13 16:03:23 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	ft_putstr_fd(char *s, int fd)
 
 void	print_message(t_philo *philo, char *text)
 {
-	char	*id;
 	char	*ts;
 	char	*str;
 	char	*tmp;
@@ -35,14 +34,15 @@ void	print_message(t_philo *philo, char *text)
 	kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&current, NULL);
 	ts = get_timestamp(&kitchen->t_begin, &current);
-	tmp = ft_itoa(philo->id);
-	id = ft_strjoin(tmp, " ");
-	free(tmp);
-	tmp = ft_strjoin(ts, id);
+	tmp = ft_strjoin(ts, philo->s_id);
 	free(ts);
-	free(id);
 	str = ft_strjoin(tmp, text);
 	free(tmp);
+	if (is_one_died(kitchen))
+	{
+		free(str);
+		return ;
+	}
 	ft_putstr_fd(str, 1);
 	free(str);
 }
