@@ -43,5 +43,14 @@ void			*ft_calloc(size_t count, size_t size);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_itoa(int n);
 void			ft_putstr_fd(char *s, int fd);
+void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id);
+int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[]);
+int		is_one_died(t_kitchen *kitchen);
+int		is_die(t_philo *philo);
+int		is_finish(int n, t_kitchen *kitchen);
+long	diff_timestamp(struct timeval *begin, struct timeval *end);
+char	*get_timestamp(struct timeval *begin, struct timeval *current);
+void	print_message(t_philo *philo, char *text);
+void	eat_sleep(t_philo *philo);
 
 #endif

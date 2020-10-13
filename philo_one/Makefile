@@ -1,7 +1,11 @@
 SRCS	=	main.c \
 			str.c \
 			conv.c \
-			mem.c
+			mem.c \
+			is.c \
+			init.c \
+			timestamp.c \
+			print.c
 
 OBJS	= ${SRCS:.c=.o}
 
