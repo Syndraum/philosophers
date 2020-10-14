@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 20:52:35 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 21:02:59 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	*philosopher(void *data)
 	{
 		sem_wait(kitchen->sem);
 		print_message(philo, TEXT_EAT);
+		gettimeofday(&philo->last_eat, NULL);
 		usleep(kitchen->t_to_eat);
 		sem_post(kitchen->sem);
 		if (is_die(philo))
