@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:44:59 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/13 16:03:23 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 14:44:53 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ void	ft_putstr_fd(char *s, int fd)
 
 void	print_message(t_philo *philo, char *text)
 {
-	char	*ts;
-	char	*str;
-	char	*tmp;
+	char			*ts;
+	char			*str;
+	char			*tmp;
 	struct timeval	current;
-	t_kitchen	*kitchen;
+	t_kitchen		*kitchen;
 
-	kitchen = (t_kitchen*) philo->kitchen;
+	kitchen = (t_kitchen*)philo->kitchen;
 	gettimeofday(&current, NULL);
 	ts = get_timestamp(&kitchen->t_begin, &current);
 	tmp = ft_strjoin(ts, philo->s_id);

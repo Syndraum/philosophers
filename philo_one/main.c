@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 14:24:16 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 14:46:09 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ void	free_kitchen(t_kitchen *kitchen)
 
 void	eat_sleep(t_philo *philo)
 {
-	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
+	t_kitchen	*kitchen;
 
+	kitchen = (t_kitchen*)philo->kitchen;
 	print_message(philo, TEXT_EAT);
 	gettimeofday(&philo->last_eat, NULL);
 	usleep(kitchen->t_to_eat);
@@ -47,10 +48,12 @@ void	eat_sleep(t_philo *philo)
 
 void	*philosopher(void *data)
 {
-	int	n;
+	int			n;
+	t_philo		*philo;
+	t_kitchen	*kitchen;
 
-	t_philo		*philo = (t_philo*)data;
-	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
+	philo = (t_philo*)data;
+	kitchen = (t_kitchen*)philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	n = 0;
 	while (!is_finish(n, kitchen) && !is_one_died(kitchen))
@@ -68,12 +71,12 @@ void	*philosopher(void *data)
 	return (0);
 }
 
-int main(int argc, char const *argv[])
+int		main(int argc, char const *argv[])
 {
 	t_kitchen	kitchen;
 	int			i;
 
-	if (argc < 5 )
+	if (argc < 5)
 	{
 		ft_putstr_fd("Number of arguemnt to low (min 5)\n", 2);
 		exit(1);
@@ -83,11 +86,11 @@ int main(int argc, char const *argv[])
 		ft_putstr_fd("Allocation problem\n", 2);
 		exit(2);
 	}
-	i=-1;
+	i = -1;
 	while (++i < kitchen.n_philo)
 	{
 		init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
-		pthread_create(&kitchen.thread[i], NULL, philosopher, &kitchen.philos[i]);
+		pthread_create(&kitchen.thread[i], 0, philosopher, &kitchen.philos[i]);
 	}
 	i = -1;
 	while (++i < kitchen.n_philo)

@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/13 15:39:54 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 14:45:34 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 {
 	char	*tmp;
-
 
 	philo->id = id;
 	tmp = ft_itoa(philo->id);
@@ -27,7 +26,7 @@ void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 	gettimeofday(&philo->last_eat, NULL);
 }
 
-int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
+int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 {
 	int i;
 
@@ -42,7 +41,7 @@ int	init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->forks = malloc(sizeof(pthread_mutex_t) * kitchen->n_philo);
 	if (kitchen->forks == 0)
 		return (0);
-	i =-1;
+	i = -1;
 	while (++i < kitchen->n_philo)
 		pthread_mutex_init(&kitchen->forks[i], NULL);
 	kitchen->thread = malloc(sizeof(pthread_t) * kitchen->n_philo);

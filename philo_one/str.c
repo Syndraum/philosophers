@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 15:52:31 by mazoise           #+#    #+#             */
-/*   Updated: 2020/10/12 16:03:05 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/14 14:44:56 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *str)
 {
-	size_t len;
+	size_t	len;
 
 	if (!str)
 		return (0);
@@ -60,7 +60,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (src == NULL)

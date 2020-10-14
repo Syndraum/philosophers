@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   conv.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mazoise <mazoise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 15:54:26 by mazoise           #+#    #+#             */
-/*   Updated: 2020/10/12 16:13:11 by mazoise          ###   ########.fr       */
+/*   Updated: 2020/10/14 14:45:03 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int		ft_abs(int n)
+int			ft_abs(int n)
 {
 	if (n < 0)
 		return (-n);
