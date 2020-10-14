@@ -1,3 +1,4 @@
 */philo_*
 *.o
 *.dSYM
+*.json

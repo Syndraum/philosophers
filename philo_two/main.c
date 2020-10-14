@@ -6,11 +6,27 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 20:37:39 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 20:52:35 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+void	free_philo(t_philo *philo)
+{
+	free(philo->s_id);
+}
+
+void	free_kitchen(t_kitchen *kitchen)
+{
+	int i;
+
+	i = -1;
+	while (++i < kitchen->n_philo)
+		free_philo(&kitchen->philos[i]);
+	free(kitchen->philos);
+	free(kitchen->thread);
+}
 
 void	*philosopher(void *data)
 {
@@ -78,5 +94,6 @@ int main(int argc, char const *argv[])
 		sem_close(kitchen.sem);
 		sem_unlink("fork");
 	}
+	free_kitchen(&kitchen);
 	return 0;
 }
