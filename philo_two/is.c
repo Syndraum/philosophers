@@ -1,47 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   is.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/14 16:02:50 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 20:35:11 by roalvare         ###   ########.fr       */
+/*   Created: 2020/10/14 20:32:50 by roalvare          #+#    #+#             */
+/*   Updated: 2020/10/14 20:34:50 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int		is_one_died(t_kitchen *kitchen)
 {
-	int len;
-
-	if (s != NULL)
-	{
-		len = ft_strlen(s);
-		write(fd, s, len);
-	}
+	return (kitchen->philo_die);
 }
 
-void	print_message(t_philo *philo, char *text)
+int		is_die(t_philo *philo)
 {
-	char			*ts;
-	char			*str;
-	char			*tmp;
 	t_kitchen		*kitchen;
+	long			diff;
 
 	kitchen = (t_kitchen*)philo->kitchen;
 	gettimeofday(&philo->now, NULL);
-	ts = get_timestamp(&kitchen->t_begin, &philo->now);
-	tmp = ft_strjoin(ts, philo->s_id);
-	free(ts);
-	str = ft_strjoin(tmp, text);
-	free(tmp);
-	if (is_one_died(kitchen))
+	diff = diff_timestamp(&philo->last_eat, &philo->now);
+	if (diff > kitchen->t_to_die)
 	{
-		free(str);
-		return ;
+		print_message(philo, TEXT_DIE);
+		kitchen->philo_die = 1;
+		return (1);
 	}
-	ft_putstr_fd(str, 1);
-	free(str);
+	return (0);
+}
+
+int		is_finish(int n, t_kitchen *kitchen)
+{
+	if (kitchen->n_must_eat != -1 && kitchen->n_must_eat == n)
+		return (1);
+	return (0);
 }

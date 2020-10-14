@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 19:30:06 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 20:37:39 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,18 @@ void	*philosopher(void *data)
 	kitchen = (t_kitchen*)philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	n = 0;
-	while (n < 5)
+	while (!is_finish(n, kitchen) && !is_one_died(kitchen) && !is_die(philo))
 	{
 		sem_wait(kitchen->sem);
 		print_message(philo, TEXT_EAT);
 		usleep(kitchen->t_to_eat);
 		sem_post(kitchen->sem);
+		if (is_die(philo))
+			return (0);
 		print_message(philo, TEXT_SLEEP);
 		usleep(kitchen->t_to_sleep);
+		if (is_die(philo))
+			return (0);
 		print_message(philo, TEXT_THINK);
 		n++;
 	}
