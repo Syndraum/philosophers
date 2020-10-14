@@ -3,7 +3,8 @@ SRCS	=	main.c \
 			conv.c \
 			mem.c \
 			timestamp.c \
-			print.c
+			print.c \
+			init.c
 
 OBJS	= ${SRCS:.c=.o}
 
@@ -11,7 +12,7 @@ INCLUDE	= $(addprefix ${D_INCLUDE}/, header.h)
 D_INCLUDE	= includes
 
 CC		= clang
-CFLAGS	= -g -Wall -Wextra -Werror -I $(D_INCLUDE)
+CFLAGS	= -g -Wall -Wextra -Werror -I $(D_INCLUDE) -pthread
 
 RN		= rm -f
 
