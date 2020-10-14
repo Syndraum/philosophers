@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 18:59:25 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 19:30:06 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,26 @@
 
 void	*philosopher(void *data)
 {
+	int			n;
 	t_philo		*philo;
+	t_kitchen	*kitchen;
 
 	philo = (t_philo*)data;
-	return 0;
+	kitchen = (t_kitchen*)philo->kitchen;
+	gettimeofday(&philo->last_eat, NULL);
+	n = 0;
+	while (n < 5)
+	{
+		sem_wait(kitchen->sem);
+		print_message(philo, TEXT_EAT);
+		usleep(kitchen->t_to_eat);
+		sem_post(kitchen->sem);
+		print_message(philo, TEXT_SLEEP);
+		usleep(kitchen->t_to_sleep);
+		print_message(philo, TEXT_THINK);
+		n++;
+	}
+	return (0);
 }
 
 int main(int argc, char const *argv[])
@@ -25,6 +41,8 @@ int main(int argc, char const *argv[])
 	t_kitchen	kitchen;
 	int			i;
 
+	sem_close(kitchen.sem);
+	sem_unlink("fork");
 	if (argc < 5)
 	{
 		ft_putstr_fd("Number of arguemnt to low (min 5)\n", 2);
@@ -35,24 +53,26 @@ int main(int argc, char const *argv[])
 		ft_putstr_fd("Allocation problem\n", 2);
 		exit(2);
 	}
+	kitchen.sem = sem_open("fork", O_CREAT, S_IRWXU, (kitchen.n_philo / 2));
+	if (kitchen.sem == SEM_FAILED)
+	{
+		ft_putstr_fd("Error : sem_open failed\n", 2);
+		return (EXIT_FAILURE);
+	}
 	i = -1;
 	while (++i < kitchen.n_philo)
 	{
 		init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
 		pthread_create(&kitchen.thread[i], 0, philosopher, &kitchen.philos[i]);
-		kitchen.sem[i] = sem_open(kitchen.philos[i].s_id, O_CREAT, S_IRWXU, 0);
-		if (kitchen.sem[i] == SEM_FAILED)
-		{
-			ft_putstr_fd("Error : sem_open failed\n", 2);
-			return (EXIT_FAILURE);
-		}
-		
 	}
 	i = -1;
 	while (++i < kitchen.n_philo)
+		pthread_join(kitchen.thread[i], NULL);
+	i = -1;
+	while (++i < kitchen.n_philo)
 	{
-		sem_close(kitchen.sem[i]);
-		sem_unlink(kitchen.philos[i].s_id);
+		sem_close(kitchen.sem);
+		sem_unlink("fork");
 	}
 	return 0;
 }

@@ -33,7 +33,7 @@ typedef struct		s_kitchen
 	int				t_to_eat;
 	int				t_to_sleep;
 	int				n_must_eat;
-	sem_t			**sem;
+	sem_t			*sem;
 	// pthread_mutex_t	*forks;
 	pthread_t		*thread;
 	t_philo			*philos;
