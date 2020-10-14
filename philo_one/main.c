@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 14:46:09 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 15:22:17 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_kitchen(t_kitchen *kitchen)
 	free(kitchen->thread);
 }
 
-void	eat_sleep(t_philo *philo)
+int		eat_sleep(t_philo *philo)
 {
 	t_kitchen	*kitchen;
 
@@ -40,10 +40,13 @@ void	eat_sleep(t_philo *philo)
 	pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 	pthread_mutex_unlock(&kitchen->forks[philo->forks[1]]);
 	print_message(philo, TEXT_SLEEP);
-	is_die(philo);
+	if (is_die(philo))
+		return (1);
 	usleep(kitchen->t_to_sleep);
-	is_die(philo);
+	if (is_die(philo))
+		return (1);
 	print_message(philo, TEXT_THINK);
+	return (0);
 }
 
 void	*philosopher(void *data)
@@ -56,17 +59,19 @@ void	*philosopher(void *data)
 	kitchen = (t_kitchen*)philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	n = 0;
-	while (!is_finish(n, kitchen) && !is_one_died(kitchen))
+	while (!is_finish(n, kitchen) && !is_one_died(kitchen) && !is_die(philo))
 	{
 		if (!pthread_mutex_lock(&kitchen->forks[philo->forks[0]]))
 		{
 			if (!pthread_mutex_lock(&kitchen->forks[philo->forks[1]]))
-				eat_sleep(philo);
+			{
+				if (eat_sleep(philo))
+					return (0);
+			}
 			else
 				pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 		}
 		n++;
-		is_die(philo);
 	}
 	return (0);
 }
