@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:35:54 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 15:22:52 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 15:34:39 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@ int		is_one_died(t_kitchen *kitchen)
 int		is_die(t_philo *philo)
 {
 	t_kitchen		*kitchen;
-	struct timeval	current;
 	long			diff;
 
 	kitchen = (t_kitchen*)philo->kitchen;
-	gettimeofday(&current, NULL);
-	diff = diff_timestamp(&philo->last_eat, &current);
+	gettimeofday(&philo->now, NULL);
+	diff = diff_timestamp(&philo->last_eat, &philo->now);
 	if (diff > kitchen->t_to_die)
 	{
 		print_message(philo, TEXT_DIE);

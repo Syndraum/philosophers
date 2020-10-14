@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 15:20:29 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 15:34:02 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct		s_philo
 	int				forks[2];
 	void			*kitchen;
 	struct timeval	last_eat;
+	struct timeval	now;
 }					t_philo;
 
 typedef struct		s_kitchen
