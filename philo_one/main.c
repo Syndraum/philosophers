@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/13 18:55:13 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 14:24:16 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@ void	eat_sleep(t_philo *philo)
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 
 	print_message(philo, TEXT_EAT);
-	usleep(kitchen->t_to_eat);
 	gettimeofday(&philo->last_eat, NULL);
+	usleep(kitchen->t_to_eat);
 	pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 	pthread_mutex_unlock(&kitchen->forks[philo->forks[1]]);
 	print_message(philo, TEXT_SLEEP);
+	is_die(philo);
 	usleep(kitchen->t_to_sleep);
+	is_die(philo);
 	print_message(philo, TEXT_THINK);
 }
 
@@ -51,7 +53,7 @@ void	*philosopher(void *data)
 	t_kitchen	*kitchen = (t_kitchen*) philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	n = 0;
-	while (!is_finish(n, kitchen) && !is_one_died(kitchen) && !is_die(philo))
+	while (!is_finish(n, kitchen) && !is_one_died(kitchen))
 	{
 		if (!pthread_mutex_lock(&kitchen->forks[philo->forks[0]]))
 		{
@@ -61,6 +63,7 @@ void	*philosopher(void *data)
 				pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
 		}
 		n++;
+		is_die(philo);
 	}
 	return (0);
 }
