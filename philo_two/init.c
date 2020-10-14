@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:39:06 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 19:11:02 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/14 19:38:35 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->philos = malloc(sizeof(t_philo) * kitchen->n_philo);
 	if (kitchen->philos == 0)
 		return (0);
+	gettimeofday(&kitchen->t_begin, NULL);
 	return (1);
 }
