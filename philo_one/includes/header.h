@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/16 16:17:12 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/16 18:04:45 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct		s_kitchen
 	pthread_t		*thread;
 	t_philo			*philos;
 	struct timeval	t_begin;
+	pthread_mutex_t	m_die;
 	char			philo_die;
 }					t_kitchen;
 

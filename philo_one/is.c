@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:35:54 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 15:34:39 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/16 17:54:48 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ int		is_die(t_philo *philo)
 	diff = diff_timestamp(&philo->last_eat, &philo->now);
 	if (diff > kitchen->t_to_die)
 	{
+		pthread_mutex_lock(&kitchen->m_die);
 		print_message(philo, TEXT_DIE);
 		kitchen->philo_die = 1;
+		pthread_mutex_unlock(&kitchen->m_die);
 		return (1);
 	}
 	return (0);
