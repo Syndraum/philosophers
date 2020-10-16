@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 18:57:17 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/16 17:25:49 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,12 @@ void	*philosopher(void *data)
 	n = 0;
 	while (!is_finish(n, kitchen) && !is_one_died(kitchen) && !is_die(philo))
 	{
-		if (!pthread_mutex_lock(&kitchen->forks[philo->forks[0]]))
-		{
-			if (!pthread_mutex_lock(&kitchen->forks[philo->forks[1]]))
-			{
-				if (eat_sleep(philo))
-					return (0);
-			}
-			else
-				pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
-		}
+		pthread_mutex_lock(&kitchen->forks[philo->forks[0]]);
+		print_message(philo, TEXT_FORK);
+		pthread_mutex_lock(&kitchen->forks[philo->forks[1]]);
+		print_message(philo, TEXT_FORK);
+		if (eat_sleep(philo))
+			return (0);
 		n++;
 	}
 	return (0);
@@ -91,11 +87,20 @@ int		main(int argc, char const *argv[])
 		ft_putstr_fd("Allocation problem\n", 2);
 		exit(2);
 	}
-	i = -1;
-	while (++i < kitchen.n_philo)
+	i = 0;
+	while (i < kitchen.n_philo)
 	{
 		init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
 		pthread_create(&kitchen.thread[i], 0, philosopher, &kitchen.philos[i]);
+		i += 2;
+	}
+	i = 1;
+	usleep(kitchen.t_to_eat / 2);
+	while (i < kitchen.n_philo)
+	{
+		init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
+		pthread_create(&kitchen.thread[i], 0, philosopher, &kitchen.philos[i]);
+		i += 2;
 	}
 	i = -1;
 	while (++i < kitchen.n_philo)

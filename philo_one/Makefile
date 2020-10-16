@@ -10,7 +10,7 @@ SRCS	=	main.c \
 OBJS	= ${SRCS:.c=.o}
 
 INCLUDE	= $(addprefix ${D_INCLUDE}/, header.h)
-D_INCLUDE	= includes
+D_INCLUDE	= ./includes
 
 CC		= clang
 CFLAGS	= -g -Wall -Wextra -Werror -I $(D_INCLUDE) -pthread

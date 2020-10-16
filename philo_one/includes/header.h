@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 15:34:02 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/16 16:17:12 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@
 # include <sys/time.h>
 # include <string.h>
 
-# define TEXT_FORK "has taken a fork\n"
-# define TEXT_EAT "is eating\n"
-# define TEXT_SLEEP "is sleeping\n"
-# define TEXT_THINK "is thinking\n"
-# define TEXT_DIE "is died\n"
+#include <stdio.h>
+
+# define TEXT_FORK " has taken a fork\n"
+# define TEXT_EAT " is eating\n"
+# define TEXT_SLEEP " is sleeping\n"
+# define TEXT_THINK " is thinking\n"
+# define TEXT_DIE " is died\n"
 
 typedef struct		s_philo
 {

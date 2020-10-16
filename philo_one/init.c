@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/14 14:45:34 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/16 16:17:23 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	init_philosoph(t_philo *philo, t_kitchen *kitchen, int id)
 
 	philo->id = id;
 	tmp = ft_itoa(philo->id);
-	philo->s_id = ft_strjoin(tmp, " ");
+	philo->s_id = ft_strjoin(" ", tmp);
 	free(tmp);
-	philo->forks[0] = id % kitchen->n_philo;
-	philo->forks[1] = (id + 1) % kitchen->n_philo;
+	philo->forks[0] = (id - 1) % kitchen->n_philo;
+	philo->forks[1] = (id) % kitchen->n_philo;
 	philo->kitchen = kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 }
