@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/16 17:25:49 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/17 12:52:23 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,27 @@ void	free_philo(t_philo *philo)
 
 void	free_kitchen(t_kitchen *kitchen)
 {
-	int i;
+	// int i;
 
-	i = -1;
-	while (++i < kitchen->n_philo)
-		free_philo(&kitchen->philos[i]);
+	// i = -1;
+	// while (++i < kitchen->n_philo)
+	// 	free_philo(&kitchen->philos[i]);
 	free(kitchen->forks);
-	free(kitchen->philos);
+	// free(kitchen->philos);
 	free(kitchen->thread);
 }
 
 int		eat_sleep(t_philo *philo)
 {
-	t_kitchen	*kitchen;
-
-	kitchen = (t_kitchen*)philo->kitchen;
 	print_message(philo, TEXT_EAT);
 	gettimeofday(&philo->last_eat, NULL);
-	usleep(kitchen->t_to_eat);
-	pthread_mutex_unlock(&kitchen->forks[philo->forks[0]]);
-	pthread_mutex_unlock(&kitchen->forks[philo->forks[1]]);
+	usleep(philo->kitchen->t_to_eat);
+	pthread_mutex_unlock(&philo->kitchen->forks[philo->forks[0]]);
+	pthread_mutex_unlock(&philo->kitchen->forks[philo->forks[1]]);
 	print_message(philo, TEXT_SLEEP);
 	if (is_die(philo))
 		return (1);
-	usleep(kitchen->t_to_sleep);
+	usleep(philo->kitchen->t_to_sleep);
 	if (is_die(philo))
 		return (1);
 	print_message(philo, TEXT_THINK);
@@ -75,6 +72,7 @@ void	*philosopher(void *data)
 int		main(int argc, char const *argv[])
 {
 	t_kitchen	kitchen;
+	t_philo		*philo;
 	int			i;
 
 	if (argc < 5)
@@ -90,16 +88,19 @@ int		main(int argc, char const *argv[])
 	i = 0;
 	while (i < kitchen.n_philo)
 	{
-		init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
-		pthread_create(&kitchen.thread[i], 0, philosopher, &kitchen.philos[i]);
+		philo = init_philosoph(&kitchen, i + 1);
+		ft_lstadd_back(&kitchen.philos, ft_lstnew(philo));
+		pthread_create(&kitchen.thread[i], 0, philosopher, philo);
 		i += 2;
 	}
 	i = 1;
 	usleep(kitchen.t_to_eat / 2);
 	while (i < kitchen.n_philo)
 	{
-		init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
-		pthread_create(&kitchen.thread[i], 0, philosopher, &kitchen.philos[i]);
+		philo = init_philosoph(&kitchen, i + 1);
+		// init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
+		ft_lstadd_back(&kitchen.philos, ft_lstnew(philo));
+		pthread_create(&kitchen.thread[i], 0, philosopher, philo);
 		i += 2;
 	}
 	i = -1;

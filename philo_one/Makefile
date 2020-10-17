@@ -5,7 +5,8 @@ SRCS	=	main.c \
 			is.c \
 			init.c \
 			timestamp.c \
-			print.c
+			print.c \
+			list.c
 
 OBJS	= ${SRCS:.c=.o}
 

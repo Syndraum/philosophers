@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/16 18:04:45 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/17 12:22:33 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,11 @@
 # define TEXT_THINK " is thinking\n"
 # define TEXT_DIE " is died\n"
 
-typedef struct		s_philo
+typedef struct	s_list
 {
-	int				id;
-	char			*s_id;
-	int				forks[2];
-	void			*kitchen;
-	struct timeval	last_eat;
-	struct timeval	now;
-}					t_philo;
+	void			*content;
+	struct s_list	*next;
+}				t_list;
 
 typedef struct		s_kitchen
 {
@@ -46,11 +42,21 @@ typedef struct		s_kitchen
 	int				n_must_eat;
 	pthread_mutex_t	*forks;
 	pthread_t		*thread;
-	t_philo			*philos;
+	t_list			*philos;
 	struct timeval	t_begin;
 	pthread_mutex_t	m_die;
 	char			philo_die;
 }					t_kitchen;
+
+typedef struct		s_philo
+{
+	int				id;
+	char			*s_id;
+	int				forks[2];
+	t_kitchen		*kitchen;
+	struct timeval	last_eat;
+	struct timeval	now;
+}					t_philo;
 
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
@@ -60,7 +66,7 @@ void				*ft_calloc(size_t count, size_t size);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_itoa(int n);
 void				ft_putstr_fd(char *s, int fd);
-void				init_philosoph(t_philo *philo, t_kitchen *kitchen, int id);
+t_philo	*init_philosoph(t_kitchen *kitchen, int id);
 int					init_kitchen(t_kitchen *kitchen, int ac, char const *av[]);
 int					is_one_died(t_kitchen *kitchen);
 int					is_die(t_philo *philo);
@@ -69,5 +75,9 @@ long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
 void				print_message(t_philo *philo, char *text);
 int					eat_sleep(t_philo *philo);
+
+t_list	*ft_lstnew(void *content);
+void	ft_lstadd_back(t_list **alst, t_list *new);
+void	ft_lstclear(t_list **lst, void (*del)(void*));
 
 #endif
