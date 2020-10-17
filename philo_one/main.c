@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/17 12:52:23 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/17 13:15:11 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int		eat_sleep(t_philo *philo)
 	print_message(philo, TEXT_EAT);
 	gettimeofday(&philo->last_eat, NULL);
 	usleep(philo->kitchen->t_to_eat);
-	pthread_mutex_unlock(&philo->kitchen->forks[philo->forks[0]]);
-	pthread_mutex_unlock(&philo->kitchen->forks[philo->forks[1]]);
+	pthread_mutex_unlock(philo->forks[0]);
+	pthread_mutex_unlock(philo->forks[1]);
 	print_message(philo, TEXT_SLEEP);
 	if (is_die(philo))
 		return (1);
@@ -50,17 +50,15 @@ void	*philosopher(void *data)
 {
 	int			n;
 	t_philo		*philo;
-	t_kitchen	*kitchen;
 
 	philo = (t_philo*)data;
-	kitchen = (t_kitchen*)philo->kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	n = 0;
-	while (!is_finish(n, kitchen) && !is_one_died(kitchen) && !is_die(philo))
+	while (!is_finish(n, philo->kitchen) && !is_one_died(philo->kitchen) && !is_die(philo))
 	{
-		pthread_mutex_lock(&kitchen->forks[philo->forks[0]]);
+		pthread_mutex_lock(philo->forks[0]);
 		print_message(philo, TEXT_FORK);
-		pthread_mutex_lock(&kitchen->forks[philo->forks[1]]);
+		pthread_mutex_lock(philo->forks[1]);
 		print_message(philo, TEXT_FORK);
 		if (eat_sleep(philo))
 			return (0);
@@ -98,7 +96,6 @@ int		main(int argc, char const *argv[])
 	while (i < kitchen.n_philo)
 	{
 		philo = init_philosoph(&kitchen, i + 1);
-		// init_philosoph(&kitchen.philos[i], &kitchen, i + 1);
 		ft_lstadd_back(&kitchen.philos, ft_lstnew(philo));
 		pthread_create(&kitchen.thread[i], 0, philosopher, philo);
 		i += 2;

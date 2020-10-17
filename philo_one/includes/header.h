@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/17 12:22:33 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/17 13:10:30 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct		s_philo
 {
 	int				id;
 	char			*s_id;
-	int				forks[2];
+	pthread_mutex_t	*forks[2];
 	t_kitchen		*kitchen;
 	struct timeval	last_eat;
 	struct timeval	now;
