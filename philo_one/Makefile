@@ -1,3 +1,7 @@
+# SRCDIR = ./src
+OBJDIR = ./objects
+INCDIR = ./includes
+
 SRCS	=	main.c \
 			str.c \
 			conv.c \
@@ -8,13 +12,13 @@ SRCS	=	main.c \
 			print.c \
 			list.c
 
-OBJS	= ${SRCS:.c=.o}
+OBJS	= $(addprefix ${OBJDIR}/, ${SRCS:.c=.o})
 
-INCLUDE	= $(addprefix ${D_INCLUDE}/, header.h)
 D_INCLUDE	= ./includes
+INCLUDE	= $(addprefix ${INCDIR}/, header.h)
 
 CC		= clang
-CFLAGS	= -g -Wall -Wextra -Werror -I $(D_INCLUDE) -pthread
+CFLAGS	= -g -Wall -Wextra -Werror -I$(INCDIR) -pthread
 
 RN		= rm -f
 
@@ -22,7 +26,13 @@ NAME	= philo_one
 
 all:	${NAME}
 
-${NAME}: ${OBJS} ${INCLUDE}
+${OBJDIR}/%.o : ./%.c
+	${CC} ${CFLAGS} -c -o $@ $<
+
+make_o:
+	@mkdir -p ${OBJDIR}
+
+${NAME}: make_o ${OBJS} ${INCLUDE}
 	${CC} ${CFLAGS} ${OBJS} -o ${NAME}
 
 clean:
