@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/17 13:15:11 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/17 13:56:46 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,7 @@ int		eat_sleep(t_philo *philo)
 	pthread_mutex_unlock(philo->forks[0]);
 	pthread_mutex_unlock(philo->forks[1]);
 	print_message(philo, TEXT_SLEEP);
-	if (is_die(philo))
-		return (1);
 	usleep(philo->kitchen->t_to_sleep);
-	if (is_die(philo))
-		return (1);
 	print_message(philo, TEXT_THINK);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/17 13:10:30 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/17 15:04:30 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct		s_philo
 	t_kitchen		*kitchen;
 	struct timeval	last_eat;
 	struct timeval	now;
+	pthread_t		*thread;
 }					t_philo;
 
 size_t				ft_strlen(const char *s);
@@ -73,6 +74,7 @@ int					is_die(t_philo *philo);
 int					is_finish(int n, t_kitchen *kitchen);
 long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
+// void	my_sleep(__useconds_t usec);
 void				print_message(t_philo *philo, char *text);
 int					eat_sleep(t_philo *philo);
 

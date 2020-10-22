@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:44:59 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/17 12:51:10 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/17 13:24:42 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	print_message(t_philo *philo, char *text)
 	if (is_one_died(philo->kitchen))
 	{
 		free(str);
-		return ;
+		exit(0) ;
 	}
 	ft_putstr_fd(str, 1);
 	free(str);
