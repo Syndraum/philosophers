@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/17 15:04:30 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/10/22 15:41:10 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct		s_philo
 	t_kitchen		*kitchen;
 	struct timeval	last_eat;
 	struct timeval	now;
-	pthread_t		*thread;
+	pthread_t		thread;
 }					t_philo;
 
 size_t				ft_strlen(const char *s);
