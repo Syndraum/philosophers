@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/11 14:39:28 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/11 16:55:23 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void				ft_putstr_fd(char *s, int fd);
 t_philo	*init_philosoph(t_kitchen *kitchen, int id);
 int					init_kitchen(t_kitchen *kitchen, int ac, char const *av[]);
 int					is_one_died(t_kitchen *kitchen);
+int					check_all_die(t_kitchen *kitchen);
 int					is_die(t_philo *philo);
 int					is_finish(int *n, t_kitchen *kitchen);
 long				diff_timestamp(struct timeval *begin, struct timeval *end);
