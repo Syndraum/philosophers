@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:35:54 by roalvare          #+#    #+#             */
-/*   Updated: 2020/10/16 17:54:48 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/11 15:00:37 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int		is_die(t_philo *philo)
 	return (0);
 }
 
-int		is_finish(int n, t_kitchen *kitchen)
+int		is_finish(int *n, t_kitchen *kitchen)
 {
-	if (kitchen->n_must_eat != -1 && kitchen->n_must_eat == n)
+	if (kitchen->n_must_eat != -1 && kitchen->n_must_eat == *n)
 		return (1);
 	return (0);
 }
