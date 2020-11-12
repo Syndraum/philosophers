@@ -10,7 +10,8 @@ SRCS	=	main.c \
 			init.c \
 			timestamp.c \
 			print.c \
-			list.c
+			list.c \
+			free.c
 
 OBJS	= $(addprefix ${OBJDIR}/, ${SRCS:.c=.o})
 
