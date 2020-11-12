@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/11 16:55:23 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 14:57:42 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ typedef struct		s_kitchen
 	pthread_t		*thread;
 	t_list			*philos;
 	struct timeval	t_begin;
+	struct timeval	t_wake_up;
 	pthread_mutex_t	m_die;
 	char			philo_die;
+	int				n_finish;
 }					t_kitchen;
 
 typedef struct		s_philo
@@ -68,7 +70,7 @@ void				*ft_calloc(size_t count, size_t size);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_itoa(int n);
 void				ft_putstr_fd(char *s, int fd);
-t_philo	*init_philosoph(t_kitchen *kitchen, int id);
+t_philo				*init_philosoph(t_kitchen *kitchen, int id);
 int					init_kitchen(t_kitchen *kitchen, int ac, char const *av[]);
 int					is_one_died(t_kitchen *kitchen);
 int					check_all_die(t_kitchen *kitchen);
@@ -76,7 +78,9 @@ int					is_die(t_philo *philo);
 int					is_finish(int *n, t_kitchen *kitchen);
 long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
-// void	my_sleep(__useconds_t usec);
+int					is_died(t_kitchen *kitchen, struct timeval *begin, struct timeval *end);
+void				set_time(struct timeval *time, int time_add);
+void				my_usleep(struct timeval *t_wake_up);
 void				print_message(t_philo *philo, char *text);
 int					eat_sleep(t_philo *philo);
 

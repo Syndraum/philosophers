@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:35:54 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/11 17:11:07 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 14:26:49 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,14 @@ int		check_all_die(t_kitchen *kitchen)
 	struct timeval	now;
 	t_philo			*philo;
 	t_list			*cursor;
-	long			diff;
-	int				n_finish;
 
-	n_finish = 0;
+	kitchen->n_finish = 0;
 	gettimeofday(&now, NULL);
 	cursor = kitchen->philos;
 	while(cursor)
 	{
 		philo = cursor->content;
-		diff = diff_timestamp(&philo->last_eat, &now);
-		if (diff > kitchen->t_to_die)
+		if (is_died(kitchen, &philo->last_eat, &now))
 		{
 			pthread_mutex_lock(&kitchen->m_die);
 			print_message(philo, TEXT_DIE);
@@ -41,10 +38,10 @@ int		check_all_die(t_kitchen *kitchen)
 			return (1);
 		}
 		if (is_finish(&philo->n_eat, kitchen))
-			n_finish++;
+			kitchen->n_finish++;
 		cursor = cursor->next;
 	}
-	if (n_finish == kitchen->n_philo)
+	if (kitchen->n_finish == kitchen->n_philo)
 		return (1);
 	return (0);
 }

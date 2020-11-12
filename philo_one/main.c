@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/11 17:00:17 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 13:52:14 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	*philosopher(void *data)
 	t_philo		*philo;
 
 	philo = (t_philo*)data;
-	gettimeofday(&philo->last_eat, NULL);
+	// gettimeofday(&philo->last_eat, NULL);
 	while (!is_finish(&philo->n_eat, philo->kitchen) && !is_one_died(philo->kitchen))
 	{
 		pthread_mutex_lock(philo->forks[0]);
