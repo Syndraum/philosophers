@@ -6,26 +6,25 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 15:22:01 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 16:56:58 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	free_philo(t_philo *philo)
+void	free_philo(void *data)
 {
+	t_philo		*philo;
+
+	philo = (t_philo*)data;
 	free(philo->s_id);
+	free(philo);
 }
 
 void	free_kitchen(t_kitchen *kitchen)
 {
-	// int i;
-
-	// i = -1;
-	// while (++i < kitchen->n_philo)
-	// 	free_philo(&kitchen->philos[i]);
 	free(kitchen->forks);
-	// free(kitchen->philos);
+	ft_lstclear(&kitchen->philos, free_philo);
 	free(kitchen->thread);
 }
 
@@ -52,7 +51,6 @@ void	*philosopher(void *data)
 	t_philo		*philo;
 
 	philo = (t_philo*)data;
-	// gettimeofday(&philo->last_eat, NULL);
 	while (!is_finish(&philo->n_eat, philo->kitchen) && !is_one_died(philo->kitchen))
 	{
 		pthread_mutex_lock(philo->forks[0]);
@@ -64,17 +62,6 @@ void	*philosopher(void *data)
 	}
 	return (0);
 }
-
-// void	*check_die(void *data){
-// 	t_philo		*philo;
-
-// 	philo = (t_philo*)data;
-// 	gettimeofday(&philo->last_eat, NULL);
-// 	pthread_create(&philo->thread, 0, philosopher, philo);
-// 	while(!is_finish(&philo->n_eat, philo->kitchen) && !is_die(philo))
-// 		;
-// 	return (0);
-// }
 
 int		main(int argc, char const *argv[])
 {
@@ -98,6 +85,7 @@ int		main(int argc, char const *argv[])
 		philo = init_philosoph(&kitchen, i + 1);
 		ft_lstadd_back(&kitchen.philos, ft_lstnew(philo));
 		pthread_create(&kitchen.thread[i], 0, philosopher, philo);
+		pthread_detach(kitchen.thread[i]);
 		i += 2;
 	}
 	i = 1;
@@ -107,14 +95,15 @@ int		main(int argc, char const *argv[])
 		philo = init_philosoph(&kitchen, i + 1);
 		ft_lstadd_back(&kitchen.philos, ft_lstnew(philo));
 		pthread_create(&kitchen.thread[i], 0, philosopher, philo);
+		pthread_detach(kitchen.thread[i]);
 		i += 2;
 	}
 	while (!check_all_die(&kitchen))
-		;
+		usleep(50);
 	// i = -1;
 	// while (++i < kitchen.n_philo)
 	// 	pthread_join(kitchen.thread[i], NULL);
 	free_kitchen(&kitchen);
-	ft_putstr_fd("END\n", 2);
+	// ft_putstr_fd("END\n", 2);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 15:19:11 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 16:15:18 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,22 +71,21 @@ void				*ft_calloc(size_t count, size_t size);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_itoa(int n);
 void				ft_putstr_fd(char *s, int fd);
+
 t_philo				*init_philosoph(t_kitchen *kitchen, int id);
 int					init_kitchen(t_kitchen *kitchen, int ac, char const *av[]);
 int					is_one_died(t_kitchen *kitchen);
 int					check_all_die(t_kitchen *kitchen);
-int					is_die(t_philo *philo);
 int					is_finish(int *n, t_kitchen *kitchen);
 long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
 int					is_died(t_kitchen *kitchen, struct timeval *begin, struct timeval *end);
-void				set_time(struct timeval *time, int time_add);
 void				my_usleep(int t_sleep, struct timeval *t_wake_up);
 void				print_message(t_philo *philo, char *text);
 int					eat_sleep(t_philo *philo);
 
-t_list	*ft_lstnew(void *content);
-void	ft_lstadd_back(t_list **alst, t_list *new);
-void	ft_lstclear(t_list **lst, void (*del)(void*));
+t_list				*ft_lstnew(void *content);
+void				ft_lstadd_back(t_list **alst, t_list *new);
+void				ft_lstclear(t_list **lst, void (*del)(void*));
 
 #endif
