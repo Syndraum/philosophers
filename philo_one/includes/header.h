@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 14:57:42 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 15:19:11 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct		s_kitchen
 	pthread_t		*thread;
 	t_list			*philos;
 	struct timeval	t_begin;
-	struct timeval	t_wake_up;
 	pthread_mutex_t	m_die;
 	char			philo_die;
 	int				n_finish;
@@ -55,9 +54,11 @@ typedef struct		s_philo
 	int				id;
 	char			*s_id;
 	pthread_mutex_t	*forks[2];
+	pthread_mutex_t	m_last_eat;
 	t_kitchen		*kitchen;
 	struct timeval	last_eat;
 	struct timeval	now;
+	struct timeval	t_wake_up;
 	pthread_t		thread;
 	int				n_eat;
 }					t_philo;
@@ -80,7 +81,7 @@ long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
 int					is_died(t_kitchen *kitchen, struct timeval *begin, struct timeval *end);
 void				set_time(struct timeval *time, int time_add);
-void				my_usleep(struct timeval *t_wake_up);
+void				my_usleep(int t_sleep, struct timeval *t_wake_up);
 void				print_message(t_philo *philo, char *text);
 int					eat_sleep(t_philo *philo);
 

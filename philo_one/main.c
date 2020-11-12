@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 13:52:14 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 15:22:01 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,17 @@ void	free_kitchen(t_kitchen *kitchen)
 int		eat_sleep(t_philo *philo)
 {
 	print_message(philo, TEXT_EAT);
+	pthread_mutex_lock(&philo->m_last_eat);
 	gettimeofday(&philo->last_eat, NULL);
-	usleep(philo->kitchen->t_to_eat);
+	pthread_mutex_unlock(&philo->m_last_eat);
+	my_usleep(philo->kitchen->t_to_eat, &philo->t_wake_up);
 	pthread_mutex_unlock(philo->forks[0]);
 	pthread_mutex_unlock(philo->forks[1]);
 	(philo->n_eat)++;
 	if (is_finish(&philo->n_eat, philo->kitchen))
 		return (1);
 	print_message(philo, TEXT_SLEEP);
-	usleep(philo->kitchen->t_to_sleep);
+	my_usleep(philo->kitchen->t_to_sleep, &philo->t_wake_up);
 	print_message(philo, TEXT_THINK);
 	return (0);
 }

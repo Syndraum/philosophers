@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 13:52:11 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 15:20:20 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_philo	*init_philosoph(t_kitchen *kitchen, int id)
 	free(tmp);
 	philo->forks[0] = &kitchen->forks[(id - 1) % kitchen->n_philo];
 	philo->forks[1] = &kitchen->forks[(id) % kitchen->n_philo];
+	pthread_mutex_init(&philo->m_last_eat, NULL);
 	philo->kitchen = kitchen;
 	gettimeofday(&philo->last_eat, NULL);
 	philo->n_eat = 0;

@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:35:54 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 14:26:49 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 15:22:52 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int		check_all_die(t_kitchen *kitchen)
 	while(cursor)
 	{
 		philo = cursor->content;
+		pthread_mutex_lock(&philo->m_last_eat);
 		if (is_died(kitchen, &philo->last_eat, &now))
 		{
 			pthread_mutex_lock(&kitchen->m_die);
@@ -37,6 +38,7 @@ int		check_all_die(t_kitchen *kitchen)
 			pthread_mutex_unlock(&kitchen->m_die);
 			return (1);
 		}
+		pthread_mutex_unlock(&philo->m_last_eat);
 		if (is_finish(&philo->n_eat, kitchen))
 			kitchen->n_finish++;
 		cursor = cursor->next;

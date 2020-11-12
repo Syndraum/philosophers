@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:39:03 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 14:55:29 by roalvare         ###   ########.fr       */
+/*   Updated: 2020/11/12 15:06:05 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		is_died(t_kitchen *kitchen, struct timeval *begin, struct timeval *end)
 
 void	set_time(struct timeval *time, int time_add)
 {
-	gettimeofday(&time, NULL);
+	gettimeofday(time, NULL);
 	time->tv_usec += time_add;
 	while (time->tv_usec >= 1000000)
 	{
@@ -44,11 +44,12 @@ void	set_time(struct timeval *time, int time_add)
 	}
 }
 
-void	my_usleep(struct timeval *t_wake_up)
+void	my_usleep(int t_sleep, struct timeval *t_wake_up)
 {
 	struct timeval	now;
 
 	gettimeofday(&now, NULL);
+	set_time(t_wake_up, t_sleep);
 	while (diff_timestamp(&now, t_wake_up) > 0)
 	{
 		usleep(50);
