@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:44:59 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 17:21:09 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 13:15:08 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	print_message(t_philo *philo, char *text)
 	char			*str;
 	char			*tmp;
 
+	pthread_mutex_lock(&(philo->kitchen->m_print));
 	gettimeofday(&philo->now, NULL);
 	ts = get_timestamp(&philo->kitchen->t_begin, &philo->now);
 	tmp = ft_strjoin(ts, philo->s_id);
@@ -38,8 +39,10 @@ void	print_message(t_philo *philo, char *text)
 	if (is_one_died(philo->kitchen))
 	{
 		free(str);
+		pthread_mutex_unlock(&(philo->kitchen->m_print));
 		exit(0);
 	}
 	ft_putstr_fd(str, 1);
+	pthread_mutex_unlock(&(philo->kitchen->m_print));
 	free(str);
 }

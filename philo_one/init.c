@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 15:20:20 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 13:08:20 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	int i;
 
 	kitchen->philo_die = 0;
+	kitchen->philo_finish = 0;
 	pthread_mutex_init(&kitchen->m_die, NULL);
+	pthread_mutex_init(&kitchen->m_print, NULL);
 	kitchen->n_must_eat = -1;
 	kitchen->n_philo = ft_atoi(argv[1]);
 	kitchen->t_to_die = ft_atoi(argv[2]) * 1000;

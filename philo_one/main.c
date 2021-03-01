@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2020/11/12 17:21:57 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 13:31:35 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	*philosopher(void *data)
 		print_message(philo, TEXT_FORK);
 		if (eat_sleep(philo))
 			return (0);
+
 	}
 	return (0);
 }
@@ -57,7 +58,7 @@ void	create_trhead(int *i, t_kitchen *kitchen)
 		philo = init_philosoph(kitchen, *i + 1);
 		ft_lstadd_back(&kitchen->philos, ft_lstnew(philo));
 		pthread_create(&kitchen->thread[*i], 0, philosopher, philo);
-		pthread_detach(kitchen->thread[*i]);
+		// pthread_detach(kitchen->thread[*i]);
 		*i += 2;
 	}
 }
@@ -66,10 +67,11 @@ int		main(int argc, char const *argv[])
 {
 	t_kitchen	kitchen;
 	int			i;
+	int			n_die;
 
 	if (argc < 5)
 	{
-		ft_putstr_fd("Number of arguemnt to low (min 5)\n", 2);
+		ft_putstr_fd("Number of arguemnt too low (min 5)\n", 2);
 		exit(1);
 	}
 	if (!init_kitchen(&kitchen, argc, argv))
@@ -82,8 +84,16 @@ int		main(int argc, char const *argv[])
 	i = 1;
 	usleep(kitchen.t_to_eat / 2);
 	create_trhead(&i, &kitchen);
-	while (!check_all_die(&kitchen))
+	n_die = 0;
+	while (-1 == (n_die = check_all_die(&kitchen)) && !kitchen.philo_finish){
 		usleep(50);
+	}
+	i = -1;
+	while(++i < kitchen.n_philo)
+	{
+		if (i != n_die)
+			pthread_join(kitchen.thread[i], NULL);
+	}
 	free_kitchen(&kitchen);
 	return (0);
 }
