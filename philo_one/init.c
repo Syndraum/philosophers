@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 13:08:20 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 13:59:55 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	pthread_mutex_init(&kitchen->m_print, NULL);
 	kitchen->n_must_eat = -1;
 	kitchen->n_philo = ft_atoi(argv[1]);
+	if (kitchen->n_philo <= 0)
+		return (1);
 	kitchen->t_to_die = ft_atoi(argv[2]) * 1000;
 	kitchen->t_to_eat = ft_atoi(argv[3]) * 1000;
 	kitchen->t_to_sleep = ft_atoi(argv[4]) * 1000;
@@ -50,14 +52,14 @@ int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 		kitchen->n_must_eat = ft_atoi(argv[5]);
 	kitchen->forks = malloc(sizeof(pthread_mutex_t) * kitchen->n_philo);
 	if (kitchen->forks == 0)
-		return (0);
+		return (2);
 	i = -1;
 	while (++i < kitchen->n_philo)
 		pthread_mutex_init(&kitchen->forks[i], NULL);
 	kitchen->thread = malloc(sizeof(pthread_t) * kitchen->n_philo);
 	if (kitchen->thread == 0)
-		return (0);
+		return (2);
 	kitchen->philos = NULL;
 	gettimeofday(&kitchen->t_begin, NULL);
-	return (1);
+	return (0);
 }

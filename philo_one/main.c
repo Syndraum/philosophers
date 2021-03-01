@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 13:31:35 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 13:57:10 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	*philosopher(void *data)
 	return (0);
 }
 
-void	create_trhead(int *i, t_kitchen *kitchen)
+void	create_thread(int *i, t_kitchen *kitchen)
 {
 	t_philo		*philo;
 
@@ -74,16 +74,16 @@ int		main(int argc, char const *argv[])
 		ft_putstr_fd("Number of arguemnt too low (min 5)\n", 2);
 		exit(1);
 	}
-	if (!init_kitchen(&kitchen, argc, argv))
+	if (init_kitchen(&kitchen, argc, argv))
 	{
 		ft_putstr_fd("Allocation problem\n", 2);
 		exit(2);
 	}
 	i = 0;
-	create_trhead(&i, &kitchen);
+	create_thread(&i, &kitchen);
 	i = 1;
 	usleep(kitchen.t_to_eat / 2);
-	create_trhead(&i, &kitchen);
+	create_thread(&i, &kitchen);
 	n_die = 0;
 	while (-1 == (n_die = check_all_die(&kitchen)) && !kitchen.philo_finish){
 		usleep(50);
