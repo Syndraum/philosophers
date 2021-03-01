@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 19:23:52 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 19:40:07 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	*philosopher(void *data)
 		if (eat_sleep(philo))
 			return (0);
 	}
-	// print_message(philo, " end\n");
 	return (0);
 }
 
@@ -58,9 +57,23 @@ void	create_thread(int *i, t_kitchen *kitchen)
 		philo = init_philosoph(kitchen, *i + 1);
 		ft_lstadd_back(&kitchen->philos, ft_lstnew(philo));
 		pthread_create(&kitchen->thread[*i], 0, philosopher, philo);
-		// pthread_detach(kitchen->thread[*i]);
 		*i += 2;
 	}
+}
+
+int		ckeck_execute(int argc, char const *argv[], t_kitchen *kitchen)
+{
+	if (argc < 5)
+	{
+		ft_putstr_fd("Number of arguemnt too low (min 5)\n", 2);
+		return (1);
+	}
+	if (init_kitchen(kitchen, argc, argv))
+	{
+		ft_putstr_fd("Allocation problem\n", 2);
+		return (2);
+	}
+	return (0);
 }
 
 int		main(int argc, char const *argv[])
@@ -68,26 +81,18 @@ int		main(int argc, char const *argv[])
 	t_kitchen	kitchen;
 	int			i;
 
-	if (argc < 5)
-	{
-		ft_putstr_fd("Number of arguemnt too low (min 5)\n", 2);
-		return(1);
-	}
-	if (init_kitchen(&kitchen, argc, argv))
-	{
-		ft_putstr_fd("Allocation problem\n", 2);
-		return(2);
-	}
+	if (ckeck_execute(argc, argv, &kitchen))
+		return (1);
 	i = 0;
 	create_thread(&i, &kitchen);
 	i = 1;
 	usleep(kitchen.t_to_eat / 2);
 	create_thread(&i, &kitchen);
-	while (-1 == check_all_die(&kitchen) && !kitchen.philo_finish){
+	while (!check_all_die(&kitchen) && !kitchen.philo_finish)
 		usleep(50);
-	}
 	i = -1;
-	while(++i < kitchen.n_philo){
+	while (++i < kitchen.n_philo)
+	{
 		pthread_mutex_unlock(&kitchen.forks[i]);
 		pthread_join(kitchen.thread[i], NULL);
 	}

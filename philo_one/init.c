@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 13:59:55 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 19:49:40 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,27 @@ t_philo	*init_philosoph(t_kitchen *kitchen, int id)
 	return (philo);
 }
 
-int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
+void	init_static_var(t_kitchen *kitchen)
 {
-	int i;
-
 	kitchen->philo_die = 0;
 	kitchen->philo_finish = 0;
 	pthread_mutex_init(&kitchen->m_die, NULL);
 	pthread_mutex_init(&kitchen->m_print, NULL);
-	kitchen->n_must_eat = -1;
+	kitchen->philos = NULL;
+}
+
+int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
+{
+	int i;
+
 	kitchen->n_philo = ft_atoi(argv[1]);
 	if (kitchen->n_philo <= 0)
 		return (1);
+	init_static_var(kitchen);
 	kitchen->t_to_die = ft_atoi(argv[2]) * 1000;
 	kitchen->t_to_eat = ft_atoi(argv[3]) * 1000;
 	kitchen->t_to_sleep = ft_atoi(argv[4]) * 1000;
+	kitchen->n_must_eat = -1;
 	if (argc > 5)
 		kitchen->n_must_eat = ft_atoi(argv[5]);
 	kitchen->forks = malloc(sizeof(pthread_mutex_t) * kitchen->n_philo);
@@ -59,7 +65,6 @@ int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->thread = malloc(sizeof(pthread_t) * kitchen->n_philo);
 	if (kitchen->thread == 0)
 		return (2);
-	kitchen->philos = NULL;
 	gettimeofday(&kitchen->t_begin, NULL);
 	return (0);
 }

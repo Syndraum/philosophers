@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 18:16:50 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 19:50:08 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <string.h>
-#include <stdio.h>
 
 # define TEXT_FORK " has taken a fork\n"
 # define TEXT_EAT " is eating\n"

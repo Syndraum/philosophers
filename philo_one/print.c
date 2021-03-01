@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:44:59 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 19:10:27 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 19:33:57 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-int	print_message(t_philo *philo, char *text)
+int		print_message(t_philo *philo, char *text)
 {
 	char			*ts;
 	char			*str;
