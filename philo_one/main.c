@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 13:57:10 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 19:23:52 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	*philosopher(void *data)
 		print_message(philo, TEXT_FORK);
 		if (eat_sleep(philo))
 			return (0);
-
 	}
+	// print_message(philo, " end\n");
 	return (0);
 }
 
@@ -67,32 +67,29 @@ int		main(int argc, char const *argv[])
 {
 	t_kitchen	kitchen;
 	int			i;
-	int			n_die;
 
 	if (argc < 5)
 	{
 		ft_putstr_fd("Number of arguemnt too low (min 5)\n", 2);
-		exit(1);
+		return(1);
 	}
 	if (init_kitchen(&kitchen, argc, argv))
 	{
 		ft_putstr_fd("Allocation problem\n", 2);
-		exit(2);
+		return(2);
 	}
 	i = 0;
 	create_thread(&i, &kitchen);
 	i = 1;
 	usleep(kitchen.t_to_eat / 2);
 	create_thread(&i, &kitchen);
-	n_die = 0;
-	while (-1 == (n_die = check_all_die(&kitchen)) && !kitchen.philo_finish){
+	while (-1 == check_all_die(&kitchen) && !kitchen.philo_finish){
 		usleep(50);
 	}
 	i = -1;
-	while(++i < kitchen.n_philo)
-	{
-		if (i != n_die)
-			pthread_join(kitchen.thread[i], NULL);
+	while(++i < kitchen.n_philo){
+		pthread_mutex_unlock(&kitchen.forks[i]);
+		pthread_join(kitchen.thread[i], NULL);
 	}
 	free_kitchen(&kitchen);
 	return (0);

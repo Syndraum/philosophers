@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 12:50:08 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/01 18:16:50 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
 int					is_died(t_kitchen *k, struct timeval *b, struct timeval *e);
 void				my_usleep(int t_sleep, struct timeval *t_wake_up);
-void				print_message(t_philo *philo, char *text);
+int					print_message(t_philo *philo, char *text);
 int					eat_sleep(t_philo *philo);
 void				free_kitchen(t_kitchen *kitchen);
 
