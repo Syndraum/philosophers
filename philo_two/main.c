@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/02 22:08:22 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/02 22:55:36 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void	*philosopher(void *data)
 	&& !is_one_died(philo->kitchen) && !is_die(philo))
 	{
 		sem_wait(philo->kitchen->sem_forks);
+		sem_wait(philo->kitchen->sem_forks);
 		print_message(philo, TEXT_FORK);
 		print_message(philo, TEXT_FORK);
 		print_message(philo, TEXT_EAT);
 		gettimeofday(&philo->last_eat, NULL);
 		my_usleep(philo->kitchen->t_to_eat, &philo->t_wake_up);
+		sem_post(philo->kitchen->sem_forks);
 		sem_post(philo->kitchen->sem_forks);
 		(philo->n_eat)++;
 		if (is_finish(&philo->n_eat, philo->kitchen))
@@ -67,7 +69,7 @@ int main(int argc, char const *argv[])
 		ft_putstr_fd("Allocation problem\n", 2);
 		return (2);
 	}
-	kitchen.sem_forks = sem_open("fork", O_CREAT, S_IRWXU, (kitchen.n_philo / 2));
+	kitchen.sem_forks = sem_open("fork", O_CREAT, S_IRWXU, (kitchen.n_philo));
 	if (kitchen.sem_forks == SEM_FAILED)
 	{
 		ft_putstr_fd("Error : sem_open failed\n", 2);
@@ -87,10 +89,12 @@ int main(int argc, char const *argv[])
 	while (!check_all_die(&kitchen) && !kitchen.philo_finish)
 		usleep(50);
 	i = -1;
-	while (++i < kitchen.n_philo)
+	while (++i < kitchen.n_philo){
+		sem_post(kitchen.sem_forks);
 		pthread_join(kitchen.thread[i], NULL);
+	}
 	i = -1;
-	while (++i < kitchen.n_philo)
+	// while (++i < kitchen.n_philo)
 		sem_close(kitchen.sem_forks);
 	sem_unlink("fork");
 	free_kitchen(&kitchen);
