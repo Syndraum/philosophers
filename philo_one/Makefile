@@ -1,5 +1,5 @@
 # SRCDIR = ./src
-OBJDIR = ./objects
+OBJDIR = objects
 INCDIR = ./includes
 
 SRCS	=	main.c \
@@ -14,8 +14,6 @@ SRCS	=	main.c \
 			free.c
 
 OBJS	= $(addprefix ${OBJDIR}/, ${SRCS:.c=.o})
-
-D_INCLUDE	= ./includes
 INCLUDE	= $(addprefix ${INCDIR}/, header.h)
 
 CC		= clang
@@ -30,10 +28,12 @@ all:	${NAME}
 ${OBJDIR}/%.o : ./%.c
 	${CC} ${CFLAGS} -c -o $@ $<
 
-make_o:
-	@mkdir -p ${OBJDIR}
+${OBJDIR}:
+	mkdir -p ${OBJDIR}
 
-${NAME}: make_o ${OBJS} ${INCLUDE}
+${OBJS} : ${INCLUDE} | ${OBJDIR}
+
+${NAME}: ${OBJS}
 	${CC} ${CFLAGS} ${OBJS} -o ${NAME}
 
 clean:
