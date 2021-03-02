@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 14:41:40 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 19:50:08 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/02 22:05:21 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct		s_kitchen
 	pthread_mutex_t	m_die;
 	char			philo_die;
 	int				philo_finish;
-	int				n_finish;
 	pthread_mutex_t	m_print;
 }					t_kitchen;
 

@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:35:54 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 19:34:23 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/02 22:05:17 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int		check_all_die(t_kitchen *kitchen)
 	t_philo			*philo;
 	t_list			*cursor;
 
-	kitchen->n_finish = 0;
 	gettimeofday(&now, NULL);
 	cursor = kitchen->philos;
 	while (cursor)

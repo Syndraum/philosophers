@@ -8,7 +8,9 @@ SRCS	=	main.c \
 			timestamp.c \
 			print.c \
 			init.c \
-			is.c
+			is.c \
+			free.c \
+			list.c
 
 OBJS	= $(addprefix ${OBJDIR}/, ${SRCS:.c=.o})
 INCLUDE	= $(addprefix ${INCDIR}/, header.h)
