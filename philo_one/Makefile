@@ -1,4 +1,3 @@
-# SRCDIR = ./src
 OBJDIR = objects
 INCDIR = ./includes
 
@@ -19,7 +18,7 @@ INCLUDE	= $(addprefix ${INCDIR}/, header.h)
 CC		= clang
 CFLAGS	= -g -Wall -Wextra -Werror -I$(INCDIR) -pthread
 
-RN		= rm -f
+RM		= rm -f
 
 NAME	= philo_one
 
