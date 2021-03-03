@@ -6,13 +6,13 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 15:54:26 by mazoise           #+#    #+#             */
-/*   Updated: 2020/10/14 15:52:29 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/03 11:41:37 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int			ft_abs(int n)
+static int			ft_abs(int n)
 {
 	if (n < 0)
 		return (-n);

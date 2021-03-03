@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:39:06 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/02 22:18:28 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/03 13:51:15 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	init_static_var(t_kitchen *kitchen)
 
 int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 {
-	// int i;
 	kitchen->n_philo = ft_atoi(argv[1]);
 	if (kitchen->n_philo <= 0)
 		return (1);
@@ -58,9 +57,6 @@ int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->thread = malloc(sizeof(pthread_t) * kitchen->n_philo);
 	if (kitchen->thread == 0)
 		return (2);
-	// kitchen->philos = malloc(sizeof(t_philo) * kitchen->n_philo);
-	// if (kitchen->philos == 0)
-	// 	return (2);
 	gettimeofday(&kitchen->t_begin, NULL);
 	return (0);
 }
