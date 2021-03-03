@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/03 17:36:45 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/03 22:24:10 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	*philosopher(void *data)
 	{
 		sem_wait(philo->kitchen->sem_forks);
 		print_message(philo, TEXT_FORK);
+		sem_wait(philo->kitchen->sem_wait);
 		sem_wait(philo->kitchen->sem_forks);
+		sem_post(philo->kitchen->sem_wait);
 		print_message(philo, TEXT_FORK);
 		print_message(philo, TEXT_EAT);
 		gettimeofday(&philo->last_eat, NULL);
@@ -72,6 +74,8 @@ int main(int argc, char const *argv[])
 
 	sem_close(kitchen.sem_forks);
 	sem_unlink("fork");
+	sem_close(kitchen.sem_wait);
+	sem_unlink("wait");
 	if (argc < 5)
 	{
 		ft_putstr_fd("Number of arguemnt to low (min 5)\n", 2);
@@ -88,16 +92,12 @@ int main(int argc, char const *argv[])
 		ft_putstr_fd("Error : sem_open failed\n", 2);
 		return (EXIT_FAILURE);
 	}
-	i = kitchen.n_philo % 2 ? 3 : 2;
-	if (i == 2)
-		ft_putstr_fd("2\n", 1);
-	else
-		ft_putstr_fd("3\n", 1);
-	launch_group(i, &kitchen);
+	launch_group(2, &kitchen);
 	while (!check_all_die(&kitchen) && !kitchen.philo_finish)
 		usleep(50);
 	i = -1;
 	while (++i < kitchen.n_philo){
+		sem_post(kitchen.sem_wait);
 		sem_post(kitchen.sem_forks);
 		pthread_join(kitchen.thread[i], NULL);
 	}

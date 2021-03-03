@@ -37,6 +37,7 @@ typedef struct		s_kitchen
 	char			philo_die;
 	int				philo_finish;
 	sem_t			*sem_print;
+	sem_t			*sem_wait;
 }					t_kitchen;
 
 typedef struct		s_philo
