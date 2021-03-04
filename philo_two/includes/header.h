@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   header.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/04 10:58:50 by roalvare          #+#    #+#             */
+/*   Updated: 2021/03/04 10:59:05 by roalvare         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef HEADER_H
 # define HEADER_H
 
@@ -5,7 +17,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <fcntl.h>
-# include <sys/stat.h> 
+# include <sys/stat.h>
 # include <semaphore.h>
 # include <sys/time.h>
 # include <string.h>
@@ -74,7 +86,6 @@ long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
 int					print_message(t_philo *philo, char *text);
 void				free_kitchen(t_kitchen *kitchen);
-// int					eat_sleep(t_philo *philo);
 
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_back(t_list **alst, t_list *new);

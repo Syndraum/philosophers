@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 10:54:18 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 10:58:32 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	create_thread(int i, t_kitchen *kitchen, int inc)
 	}
 }
 
-void		launch_group(int nbr, t_kitchen *kitchen)
+void	launch_group(int nbr, t_kitchen *kitchen)
 {
 	int i;
 
@@ -67,25 +67,32 @@ void		launch_group(int nbr, t_kitchen *kitchen)
 	}
 }
 
-int main(int argc, char const *argv[])
+int		ckeck_execute(int argc, char const *argv[], t_kitchen *kitchen)
 {
-	t_kitchen	kitchen;
-	int			i;
-
 	sem_unlink("fork");
 	sem_unlink("wait");
 	sem_unlink("print");
 	sem_unlink("die");
 	if (argc < 5)
 	{
-		ft_putstr_fd("Number of arguemnt to low (min 5)\n", 2);
+		ft_putstr_fd("Number of arguemnt too low (min 5)\n", 2);
 		return (1);
 	}
-	if (init_kitchen(&kitchen, argc, argv))
+	if (init_kitchen(kitchen, argc, argv))
 	{
 		ft_putstr_fd("Allocation problem\n", 2);
 		return (2);
 	}
+	return (0);
+}
+
+int		main(int argc, char const *argv[])
+{
+	t_kitchen	kitchen;
+	int			i;
+
+	if (ckeck_execute(argc, argv, &kitchen))
+		return (1);
 	kitchen.sem_forks = sem_open("fork", O_CREAT, S_IRWXU, (kitchen.n_philo));
 	if (kitchen.sem_forks == SEM_FAILED)
 	{
@@ -96,14 +103,12 @@ int main(int argc, char const *argv[])
 	while (!check_all_die(&kitchen) && !kitchen.philo_finish)
 		usleep(50);
 	i = -1;
-	while (++i < kitchen.n_philo){
+	while (++i < kitchen.n_philo)
+	{
 		sem_post(kitchen.sem_wait);
 		sem_post(kitchen.sem_forks);
 		pthread_join(kitchen.thread[i], NULL);
 	}
-	i = -1;
-	sem_close(kitchen.sem_forks);
-	sem_unlink("fork");
 	free_kitchen(&kitchen);
-	return 0;
+	return (0);
 }

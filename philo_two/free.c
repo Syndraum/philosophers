@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 19:49:13 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/03 22:18:52 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 10:55:56 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	free_kitchen(t_kitchen *kitchen)
 	int i;
 
 	i = -1;
-	// while (++i < kitchen->n_philo)
-	// 	free_philo(&kitchen->philos[i]);
+	sem_close(kitchen->sem_forks);
+	sem_unlink("fork");
 	sem_close(kitchen->sem_die);
 	sem_close(kitchen->sem_print);
 	sem_close(kitchen->sem_wait);
