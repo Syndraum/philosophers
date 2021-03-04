@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:58:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 13:46:18 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 14:48:27 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct		s_philo
 	struct timeval	t_wake_up;
 	pid_t			pid;
 	int				n_eat;
+	pthread_t		thread;
 }					t_philo;
 
 size_t				ft_strlen(const char *s);
@@ -80,6 +81,7 @@ t_philo				*init_philosoph(t_kitchen *kitchen, int id);
 int					init_kitchen(t_kitchen *kitchen, int ac, char const *av[]);
 int					is_one_died(t_kitchen *kitchen);
 int					check_all_die(t_kitchen *kitchen);
+int					check_die(t_philo * philo);
 int					is_die(t_philo *philo);
 int					is_died(t_kitchen *k, struct timeval *b, struct timeval *e);
 void				my_usleep(int t_sleep, struct timeval *t_wake_up);

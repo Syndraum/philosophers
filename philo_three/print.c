@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:02:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/02 22:15:39 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:05:30 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ int		print_message(t_philo *philo, char *text)
 	free(ts);
 	str = ft_strjoin(tmp, text);
 	free(tmp);
-	if (is_one_died(philo->kitchen))
-	{
-		free(str);
-		sem_post(philo->kitchen->sem_print);
-		return (1);
-	}
+	// if (check_die(philo))
+	// {
+	// 	free(str);
+	// 	sem_post(philo->kitchen->sem_print);
+	// 	return (1);
+	// }
 	ft_putstr_fd(str, 1);
 	sem_post(philo->kitchen->sem_print);
 	free(str);

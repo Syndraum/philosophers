@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:32:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 14:02:51 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:03:07 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,25 @@ void	set_die(t_kitchen *kitchen, t_philo *philo)
 {
 	print_message(philo, TEXT_DIE);
 	sem_wait(kitchen->sem_die);
+	sem_wait(kitchen->sem_print);
 	*(kitchen->philo_die) = 1;
 	// sem_post(kitchen->sem_die);
+}
+
+int		check_die(t_philo * philo)
+{
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	sem_wait(philo->sem_last_eat);
+	if (is_died(philo->kitchen, &philo->last_eat, &now))
+	{
+		set_die(philo->kitchen, philo);
+		sem_post(philo->sem_last_eat);
+		exit(1);
+	}
+	sem_post(philo->sem_last_eat);
+	return (0);
 }
 
 int		check_all_die(t_kitchen *kitchen)

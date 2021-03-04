@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:42:19 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 13:58:54 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:18:47 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*philosopher(void *data)
 
 	philo = (t_philo*)data;
 	while (!is_finish(&philo->n_eat, philo->kitchen)
-	&& !is_one_died(philo->kitchen))
+	&& !check_die(philo))
 	{
 		sem_wait(philo->kitchen->sem_forks);
 		print_message(philo, TEXT_FORK);
@@ -38,7 +38,8 @@ void	*philosopher(void *data)
 		my_usleep(philo->kitchen->t_to_sleep, &philo->t_wake_up);
 		print_message(philo, TEXT_THINK);
 	}
-	printf("fork\n");
+	if (*(philo->kitchen->philo_die))
+		exit(1);
 	return (0);
 }
 
@@ -59,8 +60,10 @@ void	create_thread(int i, t_kitchen *kitchen, int inc)
 		}
 		else if (pid == 0)
 		{
-			philosopher(philo);
-			exit (0);
+			pthread_create(&kitchen->thread[i], 0, philosopher, philo);
+			while (!check_die(philo) && !kitchen->philo_finish)
+				usleep(50);
+			exit(0);
 		}
 		else
 			philo->pid = pid;
@@ -121,10 +124,9 @@ int main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 	}
 	launch_group(2, &kitchen);
-	while (-1 == check_all_die(&kitchen) && !kitchen.philo_finish)
-		usleep(50);
-	i = -1;
-	if (kitchen.philo_die > 0)
+	waitpid(-1, &status, 0);
+	i = 0;
+	if (status > 0)
 	{
 		t_list * cursor = kitchen.philos;
 		t_philo * philo = NULL;
@@ -135,8 +137,8 @@ int main(int argc, char const *argv[])
 			cursor = cursor->next;
 		}
 	}
-	else
-		waitpid(-1, &status, 0);
+	// else
+	// 	waitpid(-1, &status, 0);
 	free_kitchen(&kitchen);
 	return 0;
 }
