@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:32:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 13:27:22 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 14:02:51 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int		is_one_died(t_kitchen *kitchen)
 {
-	if (*(kitchen->philo_die) == 1)
-		printf("DIED\n");
+
+	sem_wait(kitchen->sem_die);
+	sem_post(kitchen->sem_die);
 	return (*(kitchen->philo_die));
 }
 
@@ -38,10 +39,10 @@ int		is_die(t_philo *philo)
 
 void	set_die(t_kitchen *kitchen, t_philo *philo)
 {
-	sem_wait(kitchen->sem_die);
 	print_message(philo, TEXT_DIE);
+	sem_wait(kitchen->sem_die);
 	*(kitchen->philo_die) = 1;
-	sem_post(kitchen->sem_die);
+	// sem_post(kitchen->sem_die);
 }
 
 int		check_all_die(t_kitchen *kitchen)
@@ -49,7 +50,9 @@ int		check_all_die(t_kitchen *kitchen)
 	struct timeval	now;
 	t_philo			*philo;
 	t_list			*cursor;
+	int				i;
 
+	i = 0;
 	gettimeofday(&now, NULL);
 	cursor = kitchen->philos;
 	while (cursor)
@@ -60,12 +63,13 @@ int		check_all_die(t_kitchen *kitchen)
 		{
 			set_die(kitchen, philo);
 			sem_post(philo->sem_last_eat);
-			return (1);
+			return (i);
 		}
 		sem_post(philo->sem_last_eat);
 		cursor = cursor->next;
+		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 int		is_finish(int *n, t_kitchen *kitchen)

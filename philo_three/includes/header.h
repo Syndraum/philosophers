@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:58:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 13:19:09 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 13:46:18 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/time.h>
 # include <string.h>
 # include <stdio.h>
+#include <signal.h>
 
 # define TEXT_FORK " has taken a fork\n"
 # define TEXT_EAT " is eating\n"
@@ -62,7 +63,7 @@ typedef struct		s_philo
 	struct timeval	last_eat;
 	struct timeval	now;
 	struct timeval	t_wake_up;
-	pthread_t		thread;
+	pid_t			pid;
 	int				n_eat;
 }					t_philo;
 

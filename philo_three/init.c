@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:39:06 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 13:11:07 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 13:44:15 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_philo	*init_philosoph(t_kitchen *kitchen, int id)
 		return (0);
 	gettimeofday(&philo->last_eat, NULL);
 	philo->n_eat = 0;
+	philo->pid = -1;
 	return (philo);
 }
 
