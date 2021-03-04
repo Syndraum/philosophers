@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:58:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 20:27:09 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 20:47:28 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-
 
 # define TEXT_FORK " has taken a fork\n"
 # define TEXT_EAT " is eating\n"
@@ -84,8 +83,7 @@ void				ft_putstr_fd(char *s, int fd);
 t_philo				*init_philosoph(t_kitchen *kitchen, int id);
 int					init_kitchen(t_kitchen *kitchen, int ac, char const *av[]);
 int					is_one_died(t_kitchen *kitchen);
-int					check_all_die(t_kitchen *kitchen);
-int					check_die(t_philo * philo);
+int					check_die(t_philo *philo);
 int					is_die(t_philo *philo);
 int					is_died(t_kitchen *k, struct timeval *b, struct timeval *e);
 void				my_usleep(int t_sleep, struct timeval *t_wake_up);
@@ -94,6 +92,8 @@ long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
 int					print_message(t_philo *philo, char *text);
 void				free_kitchen(t_kitchen *kitchen);
+void				create_thread(int i, t_kitchen *kitchen, int inc);
+void				*philosopher(void *data);
 
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_back(t_list **alst, t_list *new);

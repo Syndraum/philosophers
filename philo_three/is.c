@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:32:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 20:29:17 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 20:38:14 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int		is_one_died(t_kitchen *kitchen)
 {
-
 	sem_wait(kitchen->sem_die);
 	sem_post(kitchen->sem_die);
 	return (kitchen->philo_die);
@@ -45,7 +44,7 @@ void	set_die(t_kitchen *kitchen, t_philo *philo)
 	kitchen->philo_die = 1;
 }
 
-int		check_die(t_philo * philo)
+int		check_die(t_philo *philo)
 {
 	struct timeval	now;
 
@@ -59,33 +58,6 @@ int		check_die(t_philo * philo)
 	}
 	sem_post(philo->sem_last_eat);
 	return (0);
-}
-
-int		check_all_die(t_kitchen *kitchen)
-{
-	struct timeval	now;
-	t_philo			*philo;
-	t_list			*cursor;
-	int				i;
-
-	i = 0;
-	gettimeofday(&now, NULL);
-	cursor = kitchen->philos;
-	while (cursor)
-	{
-		philo = cursor->content;
-		sem_wait(philo->sem_last_eat);
-		if (is_died(kitchen, &philo->last_eat, &now))
-		{
-			set_die(kitchen, philo);
-			sem_post(philo->sem_last_eat);
-			return (i);
-		}
-		sem_post(philo->sem_last_eat);
-		cursor = cursor->next;
-		i++;
-	}
-	return (-1);
 }
 
 int		is_finish(int *n, t_kitchen *kitchen)

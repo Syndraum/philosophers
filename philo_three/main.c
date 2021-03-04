@@ -6,72 +6,11 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:42:19 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 20:24:09 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 20:46:08 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-void	*philosopher(void *data)
-{
-	t_philo		*philo;
-
-	philo = (t_philo*)data;
-	while (!is_finish(&philo->n_eat, philo->kitchen)
-	&& !check_die(philo))
-	{
-		sem_wait(philo->kitchen->sem_forks);
-		print_message(philo, TEXT_FORK);
-		sem_wait(philo->kitchen->sem_wait);
-		sem_wait(philo->kitchen->sem_forks);
-		sem_post(philo->kitchen->sem_wait);
-		print_message(philo, TEXT_FORK);
-		print_message(philo, TEXT_EAT);
-		gettimeofday(&philo->last_eat, NULL);
-		my_usleep(philo->kitchen->t_to_eat, &philo->t_wake_up);
-		sem_post(philo->kitchen->sem_forks);
-		sem_post(philo->kitchen->sem_forks);
-		(philo->n_eat)++;
-		if (is_finish(&philo->n_eat, philo->kitchen))
-			return (0);
-		print_message(philo, TEXT_SLEEP);
-		my_usleep(philo->kitchen->t_to_sleep, &philo->t_wake_up);
-		print_message(philo, TEXT_THINK);
-	}
-	if (philo->kitchen->philo_die)
-		exit(1);
-	return (0);
-}
-
-void	create_thread(int i, t_kitchen *kitchen, int inc)
-{
-	t_philo		*philo;
-	pid_t		pid;
-
-	while (i < kitchen->n_philo)
-	{
-		philo = init_philosoph(kitchen, i + 1);
-		ft_lstadd_back(&kitchen->philos, ft_lstnew(philo));
-		pid = fork();
-		if (pid == -1)
-		{
-			ft_putstr_fd("Error : failed forw\n", 2);
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)
-		{
-			pthread_create(&kitchen->thread[i], 0, philosopher, philo);
-			pthread_detach(kitchen->thread[i]);
-			while (!check_die(philo) && !kitchen->philo_finish)
-				usleep(50);
-			free_kitchen(kitchen);
-			exit(0);
-		}
-		else
-			philo->pid = pid;
-		i += inc;
-	}
-}
 
 void	launch_group(int nbr, t_kitchen *kitchen)
 {
@@ -110,15 +49,16 @@ int		ckeck_execute(int argc, char const *argv[], t_kitchen *kitchen)
 	return (0);
 }
 
-void	waiting(t_kitchen * kitchen)
+void	waiting(t_kitchen *kitchen)
 {
 	int			status;
+	t_list		*cursor;
+	t_philo		*philo;
 
 	waitpid(-1, &status, 0);
 	if (status > 0)
 	{
-		t_list * cursor = kitchen->philos;
-		t_philo * philo = NULL;
+		cursor = kitchen->philos;
 		while (cursor != 0)
 		{
 			philo = cursor->content;
@@ -136,7 +76,7 @@ void	waiting(t_kitchen * kitchen)
 	}
 }
 
-int main(int argc, char const *argv[])
+int		main(int argc, char const *argv[])
 {
 	t_kitchen	kitchen;
 
@@ -151,5 +91,5 @@ int main(int argc, char const *argv[])
 	launch_group(2, &kitchen);
 	waiting(&kitchen);
 	free_kitchen(&kitchen);
-	return 0;
+	return (0);
 }
