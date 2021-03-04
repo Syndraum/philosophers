@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/03 22:24:10 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 10:54:18 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ int main(int argc, char const *argv[])
 	t_kitchen	kitchen;
 	int			i;
 
-	sem_close(kitchen.sem_forks);
 	sem_unlink("fork");
-	sem_close(kitchen.sem_wait);
 	sem_unlink("wait");
+	sem_unlink("print");
+	sem_unlink("die");
 	if (argc < 5)
 	{
 		ft_putstr_fd("Number of arguemnt to low (min 5)\n", 2);

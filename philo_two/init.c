@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:39:06 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/03 22:18:28 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 10:51:59 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_philo	*init_philosoph(t_kitchen *kitchen, int id)
 	philo->s_id = ft_strjoin(" ", tmp);
 	free(tmp);
 	philo->kitchen = kitchen;
+	sem_unlink(philo->s_id);
 	philo->sem_last_eat = sem_open(philo->s_id, O_CREAT, S_IRWXU, 1);
 	if (philo->sem_last_eat == SEM_FAILED)
 		return 0;
