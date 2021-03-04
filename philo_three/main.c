@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:42:19 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 15:25:47 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 20:24:09 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	*philosopher(void *data)
 		my_usleep(philo->kitchen->t_to_sleep, &philo->t_wake_up);
 		print_message(philo, TEXT_THINK);
 	}
-	if (*(philo->kitchen->philo_die))
+	if (philo->kitchen->philo_die)
 		exit(1);
 	return (0);
 }
@@ -61,8 +61,10 @@ void	create_thread(int i, t_kitchen *kitchen, int inc)
 		else if (pid == 0)
 		{
 			pthread_create(&kitchen->thread[i], 0, philosopher, philo);
+			pthread_detach(kitchen->thread[i]);
 			while (!check_die(philo) && !kitchen->philo_finish)
 				usleep(50);
+			free_kitchen(kitchen);
 			exit(0);
 		}
 		else
@@ -88,7 +90,6 @@ int		ckeck_execute(int argc, char const *argv[], t_kitchen *kitchen)
 {
 	sem_unlink("fork");
 	sem_unlink("wait");
-	sem_close(kitchen->sem_print);
 	sem_unlink("print");
 	sem_unlink("die");
 	if (argc < 5)

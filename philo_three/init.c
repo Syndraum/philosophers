@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:39:06 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 15:21:43 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 19:57:04 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_static_var(t_kitchen *kitchen)
 	kitchen->sem_print = sem_open("print", O_CREAT, S_IRWXU, 1);
 	kitchen->sem_wait = sem_open("wait", O_CREAT, S_IRWXU, 1);
 	kitchen->philos = NULL;
+	kitchen->philo_die = 0;
 	kitchen->remain = kitchen->n_philo;
 }
 
@@ -60,10 +61,6 @@ int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
 	kitchen->thread = malloc(sizeof(pthread_t) * kitchen->n_philo);
 	if (kitchen->thread == 0)
 		return (2);
-	kitchen->philo_die = malloc(sizeof(char));
-	if (kitchen->philo_die == 0)
-		return (2);
-	*(kitchen->philo_die) = 0;
 	gettimeofday(&kitchen->t_begin, NULL);
 	return (0);
 }
