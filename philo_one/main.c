@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 19:40:07 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 11:30:40 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,17 @@ int		ckeck_execute(int argc, char const *argv[], t_kitchen *kitchen)
 {
 	if (argc < 5)
 	{
-		ft_putstr_fd("Number of arguemnt too low (min 5)\n", 2);
+		ft_putstr_fd("Error: not enought argument (min 4)\n", 2);
+		return (1);
+	}
+	else if (argc > 6)
+	{
+		ft_putstr_fd("Error: too much arguments (max 5)\n", 2);
 		return (1);
 	}
 	if (init_kitchen(kitchen, argc, argv))
 	{
-		ft_putstr_fd("Allocation problem\n", 2);
+		ft_putstr_fd("Error: Allocation problem\n", 2);
 		return (2);
 	}
 	return (0);
