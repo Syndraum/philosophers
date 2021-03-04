@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:39:06 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 13:44:15 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:21:43 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_static_var(t_kitchen *kitchen)
 	kitchen->sem_print = sem_open("print", O_CREAT, S_IRWXU, 1);
 	kitchen->sem_wait = sem_open("wait", O_CREAT, S_IRWXU, 1);
 	kitchen->philos = NULL;
+	kitchen->remain = kitchen->n_philo;
 }
 
 int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])

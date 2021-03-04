@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:42:19 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 15:18:47 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:25:47 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,35 @@ int		ckeck_execute(int argc, char const *argv[], t_kitchen *kitchen)
 	return (0);
 }
 
+void	waiting(t_kitchen * kitchen)
+{
+	int			status;
+
+	waitpid(-1, &status, 0);
+	if (status > 0)
+	{
+		t_list * cursor = kitchen->philos;
+		t_philo * philo = NULL;
+		while (cursor != 0)
+		{
+			philo = cursor->content;
+			kill(philo->pid, SIGTERM);
+			cursor = cursor->next;
+		}
+		return ;
+	}
+	else if (kitchen->remain == 1)
+		return ;
+	else
+	{
+		kitchen->remain--;
+		waiting(kitchen);
+	}
+}
+
 int main(int argc, char const *argv[])
 {
 	t_kitchen	kitchen;
-	int			status;
-	int			i;
 
 	if (ckeck_execute(argc, argv, &kitchen))
 		return (1);
@@ -124,21 +148,7 @@ int main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 	}
 	launch_group(2, &kitchen);
-	waitpid(-1, &status, 0);
-	i = 0;
-	if (status > 0)
-	{
-		t_list * cursor = kitchen.philos;
-		t_philo * philo = NULL;
-		while (cursor != 0)
-		{
-			philo = cursor->content;
-			kill(philo->pid, SIGTERM);
-			cursor = cursor->next;
-		}
-	}
-	// else
-	// 	waitpid(-1, &status, 0);
+	waiting(&kitchen);
 	free_kitchen(&kitchen);
 	return 0;
 }

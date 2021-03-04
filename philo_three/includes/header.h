@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:58:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 14:48:27 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:21:08 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct		s_kitchen
 	int				philo_finish;
 	sem_t			*sem_print;
 	sem_t			*sem_wait;
+	int				remain;
 }					t_kitchen;
 
 typedef struct		s_philo
