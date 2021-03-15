@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 11:30:40 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/15 20:07:51 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	*philosopher(void *data)
 	t_philo		*philo;
 
 	philo = (t_philo*)data;
+	if (philo->id % 2 == 0)
+		usleep(philo->kitchen->t_to_eat / 2);
 	while (!is_finish(&philo->n_eat, philo->kitchen)
 	&& !is_one_died(philo->kitchen))
 	{
@@ -48,16 +50,17 @@ void	*philosopher(void *data)
 	return (0);
 }
 
-void	create_thread(int *i, t_kitchen *kitchen)
+void	create_thread(t_kitchen *kitchen)
 {
-	t_philo		*philo;
+	t_philo	*philo;
+	int		i;
 
-	while (*i < kitchen->n_philo)
+	i = -1;
+	while (++i < kitchen->n_philo)
 	{
-		philo = init_philosoph(kitchen, *i + 1);
+		philo = init_philosoph(kitchen, i + 1);
 		ft_lstadd_back(&kitchen->philos, ft_lstnew(philo));
-		pthread_create(&kitchen->thread[*i], 0, philosopher, philo);
-		*i += 2;
+		pthread_create(&kitchen->thread[i], 0, philosopher, philo);
 	}
 }
 
@@ -88,11 +91,7 @@ int		main(int argc, char const *argv[])
 
 	if (ckeck_execute(argc, argv, &kitchen))
 		return (1);
-	i = 0;
-	create_thread(&i, &kitchen);
-	i = 1;
-	usleep(kitchen.t_to_eat / 2);
-	create_thread(&i, &kitchen);
+	create_thread(&kitchen);
 	while (!check_all_die(&kitchen) && !kitchen.philo_finish)
 		usleep(50);
 	i = -1;
