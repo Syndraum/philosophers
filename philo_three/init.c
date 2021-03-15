@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:39:06 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 19:57:04 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/15 21:25:26 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	init_static_var(t_kitchen *kitchen)
 	kitchen->remain = kitchen->n_philo;
 }
 
-int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
+int		init_kitchen(t_kitchen *kitchen, int argc, char *argv[])
 {
 	kitchen->n_philo = ft_atoi(argv[1]);
 	if (kitchen->n_philo <= 0)

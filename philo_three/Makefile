@@ -11,7 +11,8 @@ SRCS	=	main.c \
 			list.c \
 			init.c \
 			free.c \
-			thread.c
+			thread.c \
+			error.c
 
 OBJS	= $(addprefix ${OBJDIR}/, ${SRCS:.c=.o})
 INCLUDE	= $(addprefix ${INCDIR}/, header.h)
