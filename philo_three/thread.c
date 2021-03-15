@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 20:45:33 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/04 20:55:51 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/15 21:43:18 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	*philosopher(void *data)
 	t_philo		*philo;
 
 	philo = (t_philo*)data;
+	if (philo->id % 2 == 0)
+		usleep(philo->kitchen->t_to_eat / 2);
 	while (!is_finish(&philo->n_eat, philo->kitchen)
 	&& !check_die(philo))
 	{
@@ -48,12 +50,14 @@ void	*philosopher(void *data)
 	return (0);
 }
 
-void	create_thread(int i, t_kitchen *kitchen, int inc)
+void	create_thread(t_kitchen *kitchen)
 {
-	t_philo		*philo;
-	pid_t		pid;
+	t_philo	*philo;
+	pid_t	pid;
+	int		i;
 
-	while (i < kitchen->n_philo)
+	i = -1;
+	while (++i < kitchen->n_philo)
 	{
 		philo = init_philosoph(kitchen, i + 1);
 		ft_lstadd_back(&kitchen->philos, ft_lstnew(philo));
@@ -71,6 +75,5 @@ void	create_thread(int i, t_kitchen *kitchen, int inc)
 		}
 		else
 			philo->pid = pid;
-		i += inc;
 	}
 }

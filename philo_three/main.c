@@ -6,24 +6,11 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:42:19 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/15 21:25:46 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/15 21:42:32 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-void	launch_group(int nbr, t_kitchen *kitchen)
-{
-	int i;
-
-	i = -1;
-	while (++i < nbr)
-	{
-		create_thread(i, kitchen, nbr);
-		if (i != nbr - 1)
-			usleep(kitchen->t_to_eat / nbr);
-	}
-}
 
 int		ckeck_execute(int argc, char *argv[], t_kitchen *kitchen)
 {
@@ -87,7 +74,7 @@ int		main(int argc, char *argv[])
 		ft_putstr_fd("Error : sem_open failed\n", 2);
 		return (EXIT_FAILURE);
 	}
-	launch_group(2, &kitchen);
+	create_thread(&kitchen);
 	waiting(&kitchen);
 	free_kitchen(&kitchen);
 	return (0);

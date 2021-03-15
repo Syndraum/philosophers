@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:58:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/15 21:25:16 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/15 21:40:28 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ long				diff_timestamp(struct timeval *begin, struct timeval *end);
 char				*get_timestamp(struct timeval *begin, struct timeval *now);
 int					print_message(t_philo *philo, char *text);
 void				free_kitchen(t_kitchen *kitchen);
-void				create_thread(int i, t_kitchen *kitchen, int inc);
+void				create_thread(t_kitchen *kitchen);
 void				*philosopher(void *data);
 int					ft_error(char *str, int value);
 int					is_all_digit(char *str);
