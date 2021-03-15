@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 14:34:12 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/01 19:49:40 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/15 20:50:39 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	init_static_var(t_kitchen *kitchen)
 	kitchen->philos = NULL;
 }
 
-int		init_kitchen(t_kitchen *kitchen, int argc, char const *argv[])
+int		init_kitchen(t_kitchen *kitchen, int argc, char *argv[])
 {
 	int i;
 

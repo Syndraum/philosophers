@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/11 17:37:48 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/15 20:07:51 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/15 20:52:22 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,26 @@ void	create_thread(t_kitchen *kitchen)
 	}
 }
 
-int		ckeck_execute(int argc, char const *argv[], t_kitchen *kitchen)
+int		ckeck_execute(int argc, char *argv[], t_kitchen *kitchen)
 {
+	int i;
+
 	if (argc < 5)
-	{
-		ft_putstr_fd("Error: not enought argument (min 4)\n", 2);
-		return (1);
-	}
+		return (ft_error("not enought argument (min 4)\n", 1));
 	else if (argc > 6)
-	{
-		ft_putstr_fd("Error: too much arguments (max 5)\n", 2);
-		return (1);
-	}
+		return (ft_error("too much arguments (max 5)\n", 1));
 	if (init_kitchen(kitchen, argc, argv))
+		return (ft_error("Allocation problem\n", 2));
+	i = 0;
+	while (++i < argc)
 	{
-		ft_putstr_fd("Error: Allocation problem\n", 2);
-		return (2);
+		if (!is_all_digit(argv[i]))
+			return (ft_error("a argument isn't a possitive int\n", 3));
 	}
 	return (0);
 }
 
-int		main(int argc, char const *argv[])
+int		main(int argc, char *argv[])
 {
 	t_kitchen	kitchen;
 	int			i;
