@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 20:45:33 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/16 01:05:50 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 13:26:17 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,12 @@ void	create_thread(t_kitchen *kitchen)
 		else if (pid == 0)
 		{
 			pthread_create(&kitchen->thread[i], 0, philosopher, philo);
-			pthread_detach(kitchen->thread[i]);
+			// pthread_detach(kitchen->thread[i]);
 			while (!check_die(philo) && !kitchen->philo_finish)
 				usleep(50);
-			// ft_putstr_fd("BYE\n", 1);
-			// pthread_join(kitchen->thread[i], NULL);
+			sem_post(kitchen->sem_wait);
+			sem_post(kitchen->sem_forks);
+			pthread_join(kitchen->thread[i], NULL);
 			i = kitchen->philo_die;
 			free_kitchen(kitchen);
 			if (i)

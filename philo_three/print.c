@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 16:02:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/16 00:14:50 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 13:25:53 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ int		print_message(t_philo *philo, char *text)
 	char			*str;
 	char			*tmp;
 
-	if (sem_wait(philo->kitchen->sem_print))
+	if (is_one_died(philo->kitchen))
 		return (1);
+	sem_wait(philo->kitchen->sem_print);
 	gettimeofday(&philo->now, NULL);
 	ts = get_timestamp(&philo->kitchen->t_begin, &philo->now);
 	tmp = ft_strjoin(ts, philo->s_id);
