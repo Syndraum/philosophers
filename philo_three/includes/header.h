@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:58:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/15 21:40:28 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 00:53:27 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 # define TEXT_FORK " has taken a fork\n"
 # define TEXT_EAT " is eating\n"
@@ -55,6 +56,7 @@ typedef struct		s_kitchen
 	sem_t			*sem_print;
 	sem_t			*sem_wait;
 	int				remain;
+	pid_t			pid_parent;
 }					t_kitchen;
 
 typedef struct		s_philo

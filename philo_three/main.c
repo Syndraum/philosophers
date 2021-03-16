@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:42:19 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/15 21:42:32 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 01:03:34 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,18 @@ void	waiting(t_kitchen *kitchen)
 	int			status;
 	t_list		*cursor;
 	t_philo		*philo;
+	pid_t		pid;
 
-	waitpid(-1, &status, 0);
+	pid = waitpid(-1, &status, 0);
 	if (status > 0)
 	{
 		cursor = kitchen->philos;
 		while (cursor != 0)
 		{
 			philo = cursor->content;
-			kill(philo->pid, SIGTERM);
+			if (pid != philo->pid){
+				kill(philo->pid, SIGKILL);
+			}
 			cursor = cursor->next;
 		}
 		return ;

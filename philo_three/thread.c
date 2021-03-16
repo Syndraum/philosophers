@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 20:45:33 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/15 21:43:18 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 01:05:50 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	*philosopher(void *data)
 	if (philo->id % 2 == 0)
 		usleep(philo->kitchen->t_to_eat / 2);
 	while (!is_finish(&philo->n_eat, philo->kitchen)
-	&& !check_die(philo))
+	&& !is_one_died(philo->kitchen))
 	{
 		eat(philo);
 		(philo->n_eat)++;
@@ -45,8 +45,9 @@ void	*philosopher(void *data)
 		my_usleep(philo->kitchen->t_to_sleep, &philo->t_wake_up);
 		print_message(philo, TEXT_THINK);
 	}
-	if (philo->kitchen->philo_die)
-		exit(1);
+	// if (philo->kitchen->philo_die)
+	// 	return(1);
+	// ft_putstr_fd("END", 1);
 	return (0);
 }
 
@@ -70,7 +71,12 @@ void	create_thread(t_kitchen *kitchen)
 			pthread_detach(kitchen->thread[i]);
 			while (!check_die(philo) && !kitchen->philo_finish)
 				usleep(50);
+			// ft_putstr_fd("BYE\n", 1);
+			// pthread_join(kitchen->thread[i], NULL);
+			i = kitchen->philo_die;
 			free_kitchen(kitchen);
+			if (i)
+				exit (1);
 			exit(0);
 		}
 		else
