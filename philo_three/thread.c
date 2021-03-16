@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 20:45:33 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/16 13:26:17 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 13:40:49 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,20 @@ void	*philosopher(void *data)
 		my_usleep(philo->kitchen->t_to_sleep, &philo->t_wake_up);
 		print_message(philo, TEXT_THINK);
 	}
-	// if (philo->kitchen->philo_die)
-	// 	return(1);
-	// ft_putstr_fd("END", 1);
 	return (0);
+}
+
+void	launch_child(t_philo *philo, int i)
+{
+	pthread_create(&philo->kitchen->thread[i], 0, philosopher, philo);
+	while (!check_die(philo) && !philo->kitchen->philo_finish)
+		usleep(50);
+	sem_post(philo->kitchen->sem_wait);
+	sem_post(philo->kitchen->sem_forks);
+	pthread_join(philo->kitchen->thread[i], NULL);
+	i = philo->kitchen->philo_die;
+	free_kitchen(philo->kitchen);
+	exit(i);
 }
 
 void	create_thread(t_kitchen *kitchen)
@@ -66,20 +76,7 @@ void	create_thread(t_kitchen *kitchen)
 		if (pid == -1)
 			exit(EXIT_FAILURE);
 		else if (pid == 0)
-		{
-			pthread_create(&kitchen->thread[i], 0, philosopher, philo);
-			// pthread_detach(kitchen->thread[i]);
-			while (!check_die(philo) && !kitchen->philo_finish)
-				usleep(50);
-			sem_post(kitchen->sem_wait);
-			sem_post(kitchen->sem_forks);
-			pthread_join(kitchen->thread[i], NULL);
-			i = kitchen->philo_die;
-			free_kitchen(kitchen);
-			if (i)
-				exit (1);
-			exit(0);
-		}
+			launch_child(philo, i);
 		else
 			philo->pid = pid;
 	}

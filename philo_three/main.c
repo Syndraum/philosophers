@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 11:42:19 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/16 13:06:47 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 13:37:38 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ void	waiting(t_kitchen *kitchen)
 		while (cursor != 0)
 		{
 			philo = cursor->content;
-			if (pid != philo->pid){
+			if (pid != philo->pid)
 				kill(philo->pid, SIGKILL);
-			}
 			cursor = cursor->next;
 		}
 		return ;

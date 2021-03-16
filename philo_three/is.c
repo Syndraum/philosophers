@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:32:50 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/16 12:31:44 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 13:31:55 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int		is_one_died(t_kitchen *kitchen)
 {
-	// sem_wait(kitchen->sem_die);
-	// sem_post(kitchen->sem_die);
 	return (kitchen->philo_die);
 }
 
@@ -42,8 +40,6 @@ void	set_die(t_kitchen *kitchen, t_philo *philo)
 	sem_wait(kitchen->sem_die);
 	kitchen->philo_die = 1;
 	sem_wait(kitchen->sem_print);
-	// sem_close(kitchen->sem_print);
-	// sem_unlink("print");
 	sem_post(kitchen->sem_die);
 }
 
@@ -57,7 +53,7 @@ int		check_die(t_philo *philo)
 	{
 		set_die(philo->kitchen, philo);
 		sem_post(philo->sem_last_eat);
-		return(1);
+		return (1);
 	}
 	sem_post(philo->sem_last_eat);
 	return (0);
