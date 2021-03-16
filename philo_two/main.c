@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 15:54:28 by roalvare          #+#    #+#             */
-/*   Updated: 2021/03/15 21:10:52 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/03/16 13:53:38 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	*philosopher(void *data)
 
 void	create_thread(t_kitchen *kitchen)
 {
-	t_philo		*philo;
+	t_philo	*philo;
 	int		i;
 
 	i = -1;
